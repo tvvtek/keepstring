@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="colorBackground">#02607b</color>
+    <color name="colorBackground_dialog_text">#01536b</color>
+    <color name="colorInfoText">#ffffff</color>
+    <color name="colorLoginText">#d4d4d4</color>
+    <color name="colorForgotPass">#9fa0f9</color>
+    <color name="colorInputDataBackground">#e8e9ff</color>
+    <color name="colorInputData">#747474</color>
+    <color name="colorEmpty">#7eb8c8</color>
+
+    <color name="transparent">#00000000</color>
+    <color name="colorTitle">#00bcd4</color>
+    <color name="colorEditTextBackground">#4e9aaf</color>
+    <color name="colorEditTextHint">#b0d5df</color>
+    <color name="colorBackgroundHelp">#02a8f4</color>
+
+    <color name="colorEditTextCorner">#80bfd1</color>
+    <color name="colorButtonBackground">#c2d5da</color>
+    <color name="colorTextLink">#54d426</color>
+</resources>

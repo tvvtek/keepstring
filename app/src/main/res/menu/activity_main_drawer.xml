@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_cloud_queue"
+            android:title="@string/text_home" />
+        <item
+            android:id="@+id/nav_history"
+            android:icon="@drawable/ic_restore"
+            android:title="@string/text_history" />
+        <item
+            android:id="@+id/nav_manual_mode"
+            android:icon="@drawable/ic_settings"
+            android:title="@string/text_manual" />
+        <item
+            android:id="@+id/nav_pin"
+            android:icon="@drawable/ic_fiber_pin_black_24px"
+            android:title="@string/text_pin" />
+        <item
+            android:id="@+id/nav_help"
+            android:icon="@drawable/ic_help"
+            android:title="@string/text_help" />
+    </group>
+
+    <item android:title="Communicate">
+        <menu>
+            <item
+                android:id="@+id/menu_item_share"
+                android:icon="@drawable/ic_share"
+                android:title="@string/text_share" />
+            <item
+                android:id="@+id/nav_exit"
+                android:icon="@drawable/ic_power"
+                android:title="@string/text_exit" />
+        </menu>
+    </item>
+
+</menu>

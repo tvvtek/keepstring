@@ -1,0 +1,113 @@
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/scrollView1"
+    android:background="@color/colorBackground"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    >
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:background="@color/colorBackground"
+        android:weightSum="1">
+
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="10dp"
+            app:srcCompat="@drawable/new_logo_main"
+            android:layout_gravity="center|top"
+            android:foregroundGravity="top"
+            android:id="@+id/imageView3"
+            android:layout_weight="0.28" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text_cloud_tab"
+            android:textColor="@color/colorInfoText"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:textSize="18dp"
+            android:id="@+id/enter_help_text" />
+
+        <EditText
+            android:layout_width="180dp"
+            android:layout_height="36dp"
+            android:textColor="@color/colorInfoText"
+            android:drawableLeft="@drawable/ic_person_outline"
+            android:layout_gravity="center"
+            android:hint="@string/login_hint"
+            android:textColorHint="@color/colorEditTextHint"
+            android:maxLength="30"
+            android:textSize="20dp"
+            android:digits="0,1,2,3,4,5,6,7,8,9,*,QWERTYUIOPASDFGHJKLZXCVBNM_-@qwertzuiopasdfghjklyxcvbnm"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/shape_edit_text_metdesign"
+            android:id="@+id/settings_enter_login" />
+
+        <EditText
+            android:layout_width="180dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center"
+            android:drawableLeft="@drawable/ic_lock"
+            android:inputType="textPassword"
+            android:textColor="@color/colorInfoText"
+            android:hint="@string/pass_hint"
+            android:textColorHint="@color/colorEditTextHint"
+            android:textSize="20dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/shape_edit_text_metdesign"
+            android:id="@+id/settings_enter_pass" />
+
+        <Button
+            android:layout_width="180dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:text="@string/enter"
+            android:background="@drawable/button_selector"
+            android:id="@+id/btn_enter" />
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:id="@+id/progressBarEnter"
+            android:layout_weight="0.28" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/forgot_pass"
+            android:textColor="@color/colorForgotPass"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:textSize="18dp"
+            android:id="@+id/forgot_pass" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text2_cloud_tab"
+            android:textColor="@color/colorInfoText"
+            android:layout_marginTop="15dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:textSize="18dp"
+            android:layout_marginBottom="35dp"
+            android:onClick="register_text"
+            android:id="@+id/register_text" />
+    </LinearLayout>
+</ScrollView>

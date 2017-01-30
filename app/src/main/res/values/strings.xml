@@ -1,0 +1,123 @@
+<resources>
+
+    <!-- For start screen -->
+    <string name="text_start_screen1">Welcome to sync clipboards manager!</string>
+    <string name="text_start_screen2">Touch the screen and we start now!</string>
+
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+
+    <!-- App name -->
+    <string name="app_name">KeepString</string>
+    <string name="app_name_with_version">KeepString v1.06</string>
+    <string name="description_app">Clipboard Manager</string>
+    <!-- menu name -->
+    <string name="text_save">Send</string>
+    <string name="text_get">Get</string>
+    <string name="text_home">KeepString</string>
+    <string name="text_cloud">Sync</string>
+    <string name="text_pin">Access by pin</string>
+    <string name="text_manual">Manual mode</string>
+    <string name="text_history">History</string>
+    <string name="text_help">Help</string>
+    <string name="text_share">Share</string>
+    <string name="text_exit">Exit</string>
+
+    <!-- other text -->
+    <string name="text_info">Transfer text, links, and other textual information from one device to another, quickly and easily!</string>
+    <string name="text_empty">Leave empty for autogeneration...</string>
+    <string name="text_cloud_tab">Log on to enable sync</string>
+    <string name="text2_cloud_tab">Registration</string>
+    <string name="exit_help_text">You are logged in as: </string>
+    <string name="exit_help_text2">Exit to stop service</string>
+    <string name="forgot_pass">Forgot your password?</string>
+    <string name="search">Search</string>
+    <!-- text information -->
+    <string name="placeholder_entertext">" Enter your text to save"</string>
+    <string name="placeholder_enterpin">" You code"</string>
+    <string name="youpinis">" Your pin:"</string>
+    <string name="youdata">" Your data:"</string>
+    <string name="clipboardnow">The contents of the clipboard:</string>
+    <string name="activity_cloud_manual_text_info1">Enter the text, then click Save. And he will be synchronized on all devices including this</string>
+    <string name="activity_cloud_manual_text_info2">Read the contents of the clipboard</string>
+    <string name="activity_cloud_manual_text_info3">The contents of the clipboard</string>
+    <string name="start_mode">"This mode allows you to store or retrieve data on the pin code."</string>
+
+    <!-- button -->
+    <string name="btn_back_mainscreen">Back</string>
+    <string name="reset">Reset</string>
+    <string name="btn_get">   Get   </string>
+    <string name="enter">Login</string>
+    <string name="sign_up">Register</string>
+    <string name="exit">Exit</string>
+    <string name="re_readclipboard">re-read clip</string>
+    <string name="switch_autoupdate">Enable background synchronization</string>
+    <string name="switch_notification">Enable notifications</string>
+
+    <!-- Toast -->
+    <string name="error_input_pin_get">Pin code should be from 6 to 10 symbols.</string>
+    <string name="error_input_data_write">Your data is short!</string>
+    <string name="error_login_pass">Your login or password short!</string>
+    <string name="error_enter">Your login or password not valid!</string>
+    <string name="register_ok">Registration is successful, you can sign using your username and password!</string>
+    <string name="error_register_login_exist">This login already exists!</string>
+    <string name="error_timeout">Timeout error!</string>
+    <string name="error_connect">Connect error!</string>
+    <string name="error_invalid_responce">Invalid response from the server!</string>
+    <string name="register_pass_error">Passwords do not match!</string>
+    <string name="register_email_error">Email address is not valid!</string>
+    <string name="save_auth_data_written">Data successfully written!</string>
+    <string name="save_auth_data_written_pinexist">This pin code already exists!</string>
+    <string name="data_copyed_into_clip">Data copied to the clipboard!</string>
+    <string name="you_pin_is_not_found">You pin is not found!</string>
+    <!-- Notification -->
+    <string name="notification_name">KeepString received:</string>
+    <string name="notification_data">The new data is written to the clipboard</string>
+
+    <!-- Settings data -->
+    <string name="login_hint">" Login"</string>
+    <string name="pass_hint">"Password"</string>
+    <string name="pass_hint_conf">" Confirm pass"</string>
+    <string name="email_hint">" Email"</string>
+
+    <!-- help data fragment_help -->
+    <string name="help_data">Transfer text, links, and other textual information from one device to another, quickly and easily!</string>
+    <string name="help_data2">Save On tab, enter your text, enter your code word, click save, and your data will be available on the code word for the day!
+If you do not enter a PIN code, it will be generated automatically.</string>
+    <string name="help_data3">Get On tab, enter your PIN code issued by the application and get the data.</string>
+    <string name="help_data4">Sync tab allows you to configure the application to automatically save the clipboard to the server, followed by access to synchronized devices.</string>
+    <string name="help_data5">Developed tvvtek company. Official site of application:</string>
+    <string name="help_data6">https://keepstring.com</string>
+    <string name="Terms_of_Service">Terms of Service for KeepString</string>
+
+
+    <!-- For menu -->
+    <string name="open_full">Open a full text</string>
+    <string name="copy_into_clip_item">Copy the item to a clip</string>
+    <string name="delete_item">Delete item</string>
+
+    <!-- For dialog -->
+    <string name="text_dialog_full_text">Full text</string>
+
+    <!-- For share -->
+    <string name="text_link_share">Work easier with clipboard manager! https://play.google.com/store/apps/details?id=com.tvvtek.keepstring</string>
+
+    <!-- For help slide1 -->
+    <string name="slide1_1">Sign in KeepString system</string>
+    <string name="slide1_2">Install the app on all your devices</string>
+    <string name="slide1_3">Log in with your username on all your devices</string>
+
+    <!-- For help slide2 -->
+    <string name="slide2_1">Fold the application and it will continue to work in the background</string>
+    <string name="slide2_2">It turns interceptor clipboard, which in real time synchronize your clipboard with other devices on which you are logged into your account.</string>
+    <string name="slide2_3">Data is synchronized on the basis of "the latest", you can simply copy any piece of text in any application, as it will be automatically intercepted, synchronized and added to the database on your device to view transaction history. On the other device will be notified that their clipboard and synchronized data is also written in their local database.</string>
+    <string name="slide2_4">Client-server interaction is carried out via an encrypted protocol, and is not available to third parties.</string>
+
+    <!-- For help slide1 -->
+    <string name="slide3_1">There is a web version, you can log into your account and write-read the data from the synchronized clipboards your devices directly on the site!</string>
+    <string name="slide3_2">The service is provided free of charge, does not effect the communication does not collect information about the phone owner except for the login, password and e-mail.</string>
+</resources>

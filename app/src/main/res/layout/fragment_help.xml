@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scrollView1"
+    android:background="@color/transparent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:background="@color/colorBackground"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:textSize="22dp"
+            android:textColor="@color/colorInfoText"
+            android:id="@+id/help_data_appname" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/help_data"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:textSize="18dp"
+            android:textColor="@color/colorInfoText"
+            android:id="@+id/help_data1" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/colorInfoText"
+            android:text="@string/help_data4"
+            android:id="@+id/help_data4" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/help_data2"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:textColor="@color/colorInfoText"
+            android:id="@+id/help_data2" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/colorInfoText"
+            android:text="@string/help_data3"
+            android:id="@+id/help_data3" />
+
+        <TextView
+            android:text="@string/help_data5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:id="@+id/help_data5"
+            android:textColor="@color/colorInfoText"
+            android:textAlignment="center" />
+
+        <TextView
+            android:text="@string/help_data6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:id="@+id/goSite"
+            android:textColor="@color/colorInfoText"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:onClick="goSite"
+            android:textStyle="normal|bold" />
+        <TextView
+            android:text="@string/Terms_of_Service"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:id="@+id/Terms"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:onClick="goTerms"
+            android:textColor="@color/colorInfoText"
+            android:textStyle="normal|bold" />
+        <TextView
+            android:text="v1.02"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="2dp"
+            android:id="@+id/version"
+            android:gravity="center"
+            android:layout_gravity="right"
+            android:foregroundGravity="right"
+            android:onClick="goTerms"
+            android:textColor="@color/colorInfoText"
+            android:textStyle="normal|bold" />
+    </LinearLayout>
+</ScrollView>

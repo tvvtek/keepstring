@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/scrollView1"
+android:background="@color/colorBackground"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+
+    >
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        android:background="@color/colorBackground"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="@dimen/capt_size_autogeneration"
+            android:text="@string/activity_cloud_manual_text_info1"
+            android:textColor="@color/colorEmpty"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:id="@+id/textViewInfoSave" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="left"
+            android:minHeight="90dp"
+            android:maxHeight="200dp"
+            android:gravity="top"
+            android:textColor="@color/colorInfoText"
+            android:textColorHint="@color/colorEditTextHint"
+            android:background="@drawable/edittext"
+            android:id="@+id/input_send_to_clip"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:textSize="18dp"
+            android:hint="@string/placeholder_entertext"
+            android:inputType="textMultiLine"
+            />
+        <Button
+            android:id="@+id/btn_write_clip"
+            android:onClick="btn_write_clip"
+            android:text="@string/text_save"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/button_selector">
+        </Button>
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textSize="@dimen/capt_size_autogeneration"
+                android:text="@string/activity_cloud_manual_text_info2"
+                android:textColor="@color/colorEmpty"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="30dp"
+                android:id="@+id/textViewInfo" />
+            <Button
+                android:id="@+id/btn_read_clip"
+                android:onClick="btn_read_clip"
+                android:text="@string/text_get"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/button_selector">
+            </Button>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="left"
+            android:minHeight="90dp"
+            android:maxHeight="200dp"
+            android:gravity="top"
+            android:textColor="@color/colorInfoText"
+            android:textColorHint="@color/colorEditTextHint"
+            android:background="@drawable/edittext"
+            android:id="@+id/input_receive_from_clip"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:textSize="18dp"
+            android:hint="@string/activity_cloud_manual_text_info3"
+            android:inputType="textMultiLine"
+            />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="5dp"
+            android:paddingTop="5dp"
+            app:srcCompat="@drawable/line"
+            android:id="@+id/line" />
+    </LinearLayout>
+</ScrollView>

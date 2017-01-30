@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scrollView1"
+    android:background="@color/colorBackground"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    >
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        android:background="@color/colorBackground"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/exit_help_text"
+            android:textColor="@color/colorInfoText"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:textSize="18dp"
+            android:id="@+id/enter_help_text" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorLoginText"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="15dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:textSize="21dp"
+            android:id="@+id/info_login" />
+
+        <Button
+            android:layout_width="180dp"
+            android:layout_height="36dp"
+            android:text="@string/exit"
+            android:id="@+id/btnExit"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/button_selector"
+             />
+
+        <Switch
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:text="@string/switch_autoupdate"
+            android:id="@+id/switchAutoUpdateData"
+            android:scrollbarSize="30dp"
+            android:paddingTop="20dp"
+            android:paddingRight="20dp"
+            android:paddingLeft="20dp"
+            android:checked="true"
+            android:layout_gravity="center_horizontal"
+            android:showText="true"
+            android:theme="@style/Theme.AppCompat" />
+
+        <Switch
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:text="@string/switch_notification"
+            android:id="@+id/switchNotification"
+            android:scrollbarSize="30dp"
+            android:paddingTop="20dp"
+            android:paddingRight="20dp"
+            android:paddingLeft="20dp"
+            android:checked="true"
+            android:layout_gravity="center_horizontal"
+            android:showText="true"
+            android:theme="@style/Theme.AppCompat" />
+
+        <Button
+            android:layout_width="180dp"
+            android:layout_height="36dp"
+            android:text="@string/re_readclipboard"
+            android:id="@+id/btnRe_readclipboard"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/button_selector"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorInfoText"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:textSize="18dp"
+            android:id="@+id/info_clipboardnow" />
+        <TextView
+            android:id="@+id/clipboardnow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="top"
+            android:foregroundGravity="top"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:textSize="18dp"
+            android:textColor="@color/colorInfoText"
+            android:textIsSelectable="true"
+            android:background="@drawable/edittext"
+            android:inputType="textMultiLine"
+            android:text="" />
+    </LinearLayout>
+</ScrollView>

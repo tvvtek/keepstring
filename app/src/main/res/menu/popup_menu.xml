@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/cm_open_id"
+        android:title="@string/open_full"/>
+    <item
+        android:id="@+id/cm_copy_id"
+        android:title="@string/copy_into_clip_item"/>
+    <item
+        android:id="@+id/cm_delete_id"
+        android:title="@string/delete_item"/>
+</menu>
