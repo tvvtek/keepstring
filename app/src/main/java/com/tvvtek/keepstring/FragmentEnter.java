@@ -43,6 +43,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class FragmentEnter extends Fragment {
     SharedPreferences sPref;
+    HelperFragmentHistoryDBWorked db;
     public static final String APP_PREFERENCES_SWITCH_NOTIFICATION = "switch_notification";
     public static final String BROADCAST_ACTION = "action_session_closed";
     private BroadcastReceiver broadcastReceiver;
@@ -50,7 +51,7 @@ public class FragmentEnter extends Fragment {
     ProgressBar progressBarEnter;
     EditText enterLogin, enterPass;
     TextView enter_help_text, info_login, info_clipboardnow, clipboardnow, register_text, forgotpass;
-    Button btnEnter, btnExit, btnRe_read;
+    Button btnEnter, btnExit, btnRe_read, btnCleanHistory;
     Switch switchAutoUpdate, switchNotification;
     Handler handler_enter;
     StaticSettings staticSettings;
@@ -221,6 +222,7 @@ public class FragmentEnter extends Fragment {
         final View myViewAuthOk = inflater.inflate(R.layout.fragment_settings_auth, container, false);
         btnExit = (Button)myViewAuthOk.findViewById(R.id.btnExit);
         btnRe_read = (Button)myViewAuthOk.findViewById(R.id.btnRe_readclipboard);
+        btnCleanHistory = (Button)myViewAuthOk.findViewById(R.id.btnCleanDb);
         info_login = (TextView)myViewAuthOk.findViewById(R.id.info_login);
         info_clipboardnow = (TextView)myViewAuthOk.findViewById(R.id.info_clipboardnow);
         info_clipboardnow.setText(R.string.clipboardnow);
@@ -250,6 +252,11 @@ public class FragmentEnter extends Fragment {
         }});
         btnRe_read.setOnClickListener(new View.OnClickListener(){public void onClick(View myView) {
             clipboardnow.setText(reReadClipboard());
+        }});
+        btnCleanHistory.setOnClickListener(new View.OnClickListener(){public void onClick(View myView) {
+            Context context = getContext();
+            db = new HelperFragmentHistoryDBWorked(context);
+            db.dropAllTable();
         }});
         //------------------------------
         // Start service into data

@@ -40,6 +40,16 @@
         <Button
             android:layout_width="180dp"
             android:layout_height="36dp"
+            android:text="@string/cleanHistory"
+            android:id="@+id/btnCleanDb"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/button_selector"
+            />
+
+        <Button
+            android:layout_width="180dp"
+            android:layout_height="36dp"
             android:text="@string/exit"
             android:id="@+id/btnExit"
             android:layout_gravity="center"

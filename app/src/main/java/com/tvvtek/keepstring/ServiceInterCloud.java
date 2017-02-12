@@ -61,7 +61,7 @@ public class ServiceInterCloud extends Service {
         super.onCreate();
     }
 
-    public int onStartCommand(Intent intent, int flags, int startId) {
+    public int onStartCommand(Intent intent, int flags, final int startId) {
         Log.d(staticSettings.getLogTag(), "StartService");
         try {
             data_clipboard_first_start = clipRead(); // read clipboard on device at first start
@@ -132,13 +132,16 @@ public class ServiceInterCloud extends Service {
                            // Log.d(TAG, "STATE=" + Boolean.toString(data_from_server_md5.equals(data_clipboard_first_start_md5)));
                            // Log.d(TAG, "md5=" + data_from_server_md5 + "|" + data_clipboard_first_start_md5);
 
-                            if (!data_from_server_md5.equals(data_clipboard_md5) & !data_from_server_md5.equals(data_clipboard_first_start_md5) & !data_from_server_md5.equals(toMd5(clipRead()))){
+                            if (!data_from_server_md5.equals(data_clipboard_md5) & !data_from_server_md5.equals(data_clipboard_first_start_md5) & !data_from_server_md5.equals(toMd5(clipRead())) & !data_from_server.equals("")){
                                 data_clipboard_ondevice = data_from_server;
-                                clipWrite(data_from_server);
-                                sPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                                if (sPref.getBoolean(APP_PREFERENCES_SWITCH_NOTIFICATION, true)){
-                                   sendNotification(data_from_server);
-                                   Log.d(staticSettings.getLogTag(), "notification=" + sPref.getBoolean(APP_PREFERENCES_SWITCH_NOTIFICATION, true));
+                                if (data_from_server.equals("errrd")){Log.d(staticSettings.getLogTag(), "error read from server=" + data_from_server);}
+                                else {
+                                    clipWrite(data_from_server);
+                                    sPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                                    if (sPref.getBoolean(APP_PREFERENCES_SWITCH_NOTIFICATION, true)) {
+                                        sendNotification(data_from_server);
+                                        Log.d(staticSettings.getLogTag(), "notification=" + sPref.getBoolean(APP_PREFERENCES_SWITCH_NOTIFICATION, true));
+                                    }
                                 }
                             }
                             Log.d(staticSettings.getLogTag(), "Response from server=" + data_from_server);

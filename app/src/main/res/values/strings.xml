@@ -13,7 +13,7 @@
 
     <!-- App name -->
     <string name="app_name">KeepString</string>
-    <string name="app_name_with_version">KeepString v1.06</string>
+    <string name="app_name_with_version">KeepString v1.07</string>
     <string name="description_app">Clipboard Manager</string>
     <!-- menu name -->
     <string name="text_save">Send</string>
@@ -53,6 +53,7 @@
     <string name="btn_get">   Get   </string>
     <string name="enter">Login</string>
     <string name="sign_up">Register</string>
+    <string name="cleanHistory">Clean history</string>
     <string name="exit">Exit</string>
     <string name="re_readclipboard">re-read clip</string>
     <string name="switch_autoupdate">Enable background synchronization</string>

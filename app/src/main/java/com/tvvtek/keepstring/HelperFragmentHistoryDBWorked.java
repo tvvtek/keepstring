@@ -28,6 +28,7 @@ public class HelperFragmentHistoryDBWorked implements InterfaceForIODataBase {
     public HelperFragmentHistoryDataBase mDatabaseHelper;
     public SQLiteDatabase mSqLiteDatabase;
 
+
     @Override
     public void writeDataBase(String userdata) {
         try {
@@ -142,5 +143,13 @@ public class HelperFragmentHistoryDBWorked implements InterfaceForIODataBase {
            cursor.close();
        }
         return result;
+    }
+
+    @Override
+    public void dropAllTable() {
+        mDatabaseHelper = new HelperFragmentHistoryDataBase(context, "history_local.db", null, 1);
+        mSqLiteDatabase = mDatabaseHelper.getWritableDatabase();
+        mSqLiteDatabase.delete("history", null, null);
+        mSqLiteDatabase.close();
     }
 }
