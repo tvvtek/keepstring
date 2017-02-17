@@ -66,12 +66,14 @@
     <string name="register_ok">Регистрация завершена, войдите, используя логин и пароль!</string>
     <string name="error_register_login_exist">Логин уже существует!</string>
     <string name="error_timeout">Error: timeout!</string>
+    <string name="error_connect">Ошибка подключения!</string>
     <string name="register_pass_error">Пароли не совпадают!</string>
     <string name="register_email_error">Email адрес не корректен!</string>
     <string name="save_auth_data_written">Данные успешно записаны!</string>
     <string name="save_auth_data_written_pinexist">Пин код уже существует!</string>
     <string name="data_copyed_into_clip">Данные скопированы в буфер обмена!</string>
     <string name="you_pin_is_not_found">Введенный пин код не существует!</string>
+    <string name="error_invalid_responce">Invalid response from the server!</string>
     <!-- Notification -->
     <string name="notification_name">KeepString получено:</string>
     <string name="notification_data">Новые данные записаны в буфер обмена</string>
