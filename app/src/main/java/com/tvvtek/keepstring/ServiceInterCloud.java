@@ -18,7 +18,7 @@ import android.util.Log;
 
 import com.tvvtek.connectpackage.ConnectLogic;
 
-import java.math.BigInteger;
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.TimeUnit;
@@ -62,7 +62,7 @@ public class ServiceInterCloud extends Service {
     }
 
     public int onStartCommand(Intent intent, int flags, final int startId) {
-        Log.d(staticSettings.getLogTag(), "StartService");
+     //   Log.d(staticSettings.getLogTag(), "StartService");
         try {
             data_clipboard_first_start = clipRead(); // read clipboard on device at first start
         }
@@ -85,8 +85,8 @@ public class ServiceInterCloud extends Service {
             public void run() {
                 int x = 0;
                 while (state_thread) {
-                    Log.d(staticSettings.getLogTag(), "state_thread=true");
-                    Log.d(staticSettings.getLogTag(), "trigger=" + trigger);
+                //    Log.d(staticSettings.getLogTag(), "state_thread=true");
+                //    Log.d(staticSettings.getLogTag(), "trigger=" + trigger);
                     try {
                         TimeUnit.SECONDS.sleep(staticSettings.getTimePerUpdateData());
                         ConnectLogic connect = new ConnectLogic(); // For server connect and send data
@@ -104,17 +104,18 @@ public class ServiceInterCloud extends Service {
                             data_from_server = connect.getResponse();
                             trigger = false;
                             // send body ---------------------------------------------------------------
-                            Log.d(staticSettings.getLogTag(), "дернули метод буфера, шлем на сервак и получаем ответ=" + data_from_server);
+                        //    Log.d(staticSettings.getLogTag(), "дернули метод буфера, шлем на сервак и получаем ответ=" + data_from_server);
 // end send body -----------------------------------------------------------
                         } else {
                             // flag 3 - reseive clip data form server
                             String[] request_read = {
-                                    "flag",  "3",
+                                    "flag",  "4",
                                     "cookie",  user_key_fromdevice,
+                                    "md5data",  toMd5(clipRead()),
                                     "androidkey",  staticSettings.getAndroidKey(),};
                             connect.setRequest(request_read);
                             connect.work();
-                            Log.d(staticSettings.getLogTag(), "flag=3" + "|" + x++);
+                       //     Log.d(staticSettings.getLogTag(), "flag=4" + "|" + "md5clip=" + toMd5(clipRead()) + "|" + "clipread=" + clipRead());
                             trigger = false;
                             /*
 
@@ -124,6 +125,7 @@ public class ServiceInterCloud extends Service {
                             1 successfully
                          */
                             while(connect.getStateRequest() == 2){}
+                            data_from_server = null;
                             data_from_server = connect.getResponse(); // string from server
                             // тут решаем пришли другие данные или теже, чтобы не писать лишний раз в буфер обмена
                             data_from_server_md5 = toMd5(data_from_server);
@@ -135,20 +137,21 @@ public class ServiceInterCloud extends Service {
                             if (!data_from_server_md5.equals(data_clipboard_md5) & !data_from_server_md5.equals(data_clipboard_first_start_md5) & !data_from_server_md5.equals(toMd5(clipRead())) & !data_from_server.equals("")){
                                 data_clipboard_ondevice = data_from_server;
                                 if (data_from_server.equals("errrd")){Log.d(staticSettings.getLogTag(), "error read from server=" + data_from_server);}
+                                else if (data_from_server.equals("==")){Log.d(staticSettings.getLogTag(), "md5 sum is equal, there is nothing to writing");}
                                 else {
                                     clipWrite(data_from_server);
                                     sPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                                     if (sPref.getBoolean(APP_PREFERENCES_SWITCH_NOTIFICATION, true)) {
                                         sendNotification(data_from_server);
-                                        Log.d(staticSettings.getLogTag(), "notification=" + sPref.getBoolean(APP_PREFERENCES_SWITCH_NOTIFICATION, true));
+                                    //    Log.d(staticSettings.getLogTag(), "notification=" + sPref.getBoolean(APP_PREFERENCES_SWITCH_NOTIFICATION, true));
                                     }
                                 }
                             }
-                            Log.d(staticSettings.getLogTag(), "Response from server=" + data_from_server);
+                           // Log.d(staticSettings.getLogTag(), "Response from server=" + data_from_server);
 // end send body -----------------------------------------------------------
                         }
                     } catch (Exception e) {
-                        Log.d(staticSettings.getLogTag(), "error_connection_service=" + e);
+                     //   Log.d(staticSettings.getLogTag(), "error_connection_service=" + e);
                     }
                 }
             }
@@ -213,7 +216,7 @@ public class ServiceInterCloud extends Service {
     }
     // generate MD5 hash
     private String toMd5(String input) {
-        String result = "";
+     /*   String result = "";
         try {
             MessageDigest m = MessageDigest.getInstance("MD5");
             m.update(input.getBytes(), 0, input.length());
@@ -221,6 +224,23 @@ public class ServiceInterCloud extends Service {
         }catch (NoSuchAlgorithmException z){
            // Log.d(TAG, z.toString());
             result = "error";
+        }
+        return result;*/
+        MessageDigest m = null;
+        try {
+            m = MessageDigest.getInstance("MD5");
+        } catch (NoSuchAlgorithmException e) {
+        e.printStackTrace();
+        }
+        try {
+            m.update(input.getBytes("UTF8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        byte s[] = m.digest();
+        String result = "";
+        for (int i = 0; i < s.length; i++) {
+            result += Integer.toHexString((0x000000ff & s[i]) | 0xffffff00).substring(6);
         }
         return result;
     }

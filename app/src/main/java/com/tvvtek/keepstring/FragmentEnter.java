@@ -116,7 +116,7 @@ public class FragmentEnter extends Fragment {
         // Refresh IU
         handler_enter = new Handler()
         {
-            public void handleMessage(Message msg)
+            public void handleMessage(Message msg) throws NullPointerException
             {
                 // update TextView
                 Bundle bundle = msg.getData();
@@ -128,8 +128,12 @@ public class FragmentEnter extends Fragment {
                 {
                     btnEnter.setEnabled(true);
                     progressBarEnter.setVisibility(View.INVISIBLE);
-                    Toast toast = Toast.makeText(getContext(), R.string.error_enter, Toast.LENGTH_SHORT);
-                    toast.show();
+                    try {
+                        Toast toast = Toast.makeText(getContext(), R.string.error_enter, Toast.LENGTH_SHORT);
+                        toast.show();
+                    }catch (NullPointerException error){
+                        error.printStackTrace();
+                    }
                 }
                 else if (data_from_thread_io_enter.length() == 128) // enter is OK, added cookie into file staticSettings and hide button and input
                 {
@@ -142,15 +146,23 @@ public class FragmentEnter extends Fragment {
                 {
                     btnEnter.setEnabled(true);
                     progressBarEnter.setVisibility(View.INVISIBLE);
+                    try{
                     Toast toast = Toast.makeText(getContext(), R.string.error_connect, Toast.LENGTH_LONG);
                     toast.show();
+                    }catch (NullPointerException error){
+                        error.printStackTrace();
+                    }
                 }
                 else
                 {
                     btnEnter.setEnabled(true);
                     progressBarEnter.setVisibility(View.INVISIBLE);
+                    try{
                     Toast toast = Toast.makeText(getContext(), R.string.error_invalid_responce, Toast.LENGTH_LONG);
                     toast.show();
+                    }catch (NullPointerException error){
+                        error.printStackTrace();
+                    }
                 }
             };
         };

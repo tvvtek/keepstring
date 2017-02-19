@@ -11,8 +11,8 @@ public final class StaticSettings {
     private static int maxEditTextValue = 65535;
     private static int minInputPinCode = 6;
     private static String logTag = "KeepString";
-    private static int time_update = 8;
-    private static int time_timeout_request = 8;
+    private static int time_update = 10;
+    private static int time_timeout_request = 10;
     private static int time_splash_screen = 2000; // ms
 
     private static int minLoginPass = 5;
