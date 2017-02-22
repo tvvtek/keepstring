@@ -13,7 +13,7 @@
 
     <!-- App name -->
     <string name="app_name">KeepString</string>
-    <string name="app_name_with_version">KeepString v1.08</string>
+    <string name="app_name_with_version">KeepString v1.09</string>
     <string name="description_app">Clipboard Manager</string>
     <!-- menu name -->
     <string name="text_save">Send</string>
@@ -99,6 +99,7 @@ If you do not enter a PIN code, it will be generated automatically.</string>
     <!-- For menu -->
     <string name="open_full">Open a full text</string>
     <string name="copy_into_clip_item">Copy the item to a clip</string>
+    <string name="share_item">Share</string>
     <string name="delete_item">Delete item</string>
 
     <!-- For dialog -->

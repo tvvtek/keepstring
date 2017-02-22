@@ -26,11 +26,9 @@ import java.util.concurrent.TimeUnit;
 public class ServiceInterCloud extends Service {
     SharedPreferences sPref;
     StaticSettings staticSettings;
-
     HelperFragmentHistoryDBWorked db;
 
     public static final String APP_PREFERENCES_SWITCH_NOTIFICATION = "switch_notification";
-   // private String serverAddress = staticSettings.getUrl() + "/cloudapi.php";
     private String data_from_server = "";
     private String data_from_server_md5 = "";
     private volatile boolean state_thread = true;
@@ -69,8 +67,7 @@ public class ServiceInterCloud extends Service {
         catch (Exception clipnothing){
           //  Log.d(TAG, "Clip is empty");
         }
-      //  Log.d(TAG, "readfirst2=" +{} sPref.getBoolean(APP_PREFERENCES_SWITCH_NOTIFICATION, true));
-       // final boolean trigger = true;
+
         try {
             user_key_fromdevice = intent.getStringExtra("userkey");
             saveCookie(user_key_fromdevice);

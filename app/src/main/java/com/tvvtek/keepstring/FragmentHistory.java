@@ -2,6 +2,7 @@ package com.tvvtek.keepstring;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -12,7 +13,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.PopupMenu;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -28,9 +28,6 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class FragmentHistory extends Fragment {
 
-    private static final int CM_OPEN_ID = 1;
-    private static final int CM_COPY_ID = 2;
-    private static final int CM_DELETE_ID = 3;
     private static String userkey = "userkey";
     SharedPreferences sPref;
     LinearLayout view;
@@ -75,10 +72,8 @@ public class FragmentHistory extends Fragment {
         listView = (ListView) myView.findViewById(R.id.lv);
         editTextSearch = (EditText) myView.findViewById(R.id.editText);
         adapter = new HelperFragmentHistoryLocalItemList(getActivity(), db.getArrayListItem());
-      //  adapter = new HelperFragmentHistoryLocalItemList(getActivity(), values);
         listView.setAdapter(adapter);
         registerForContextMenu(listView);
-        // update listview
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
@@ -92,23 +87,27 @@ public class FragmentHistory extends Fragment {
                         switch (item.getItemId())
                         {
                             case R.id.cm_open_id:
-                            //    Log.d(TAG, "titleopen=" + adapter.getItem(pos).substring(25,44));
                                 db = new HelperFragmentHistoryDBWorked(getContext());
                                 dialog_frg = new FragmentDialog();
                                 Bundle bundle = new Bundle();
                                 bundle.putString("data", db.readDataByDate(adapter.getItem(pos).substring(25,44)));
-                              //  Log.d(TAG, "hist_pos=" + pos);
                                 dialog_frg.setArguments(bundle);
                                 dialog_frg.show(getFragmentManager(), "");
                                 return true;
                             case R.id.cm_copy_id:
-                                AdapterView.AdapterContextMenuInfo acmi = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-                                //     Log.d(TAG, "titlecopy=" + adapter.getItem(acmi.position).substring(25,44));
                                 db = new HelperFragmentHistoryDBWorked(getContext());
                                 clipWrite(db.readDataByDate(adapter.getItem(pos).substring(25,44)));
-                            //    Log.d(TAG, "MENUPOS" + pos);
                                 Toast toast = Toast.makeText(getContext(), R.string.data_copyed_into_clip, Toast.LENGTH_SHORT);
                                 toast.show();
+                                return true;
+                            case R.id.cm_share_id:
+                                db = new HelperFragmentHistoryDBWorked(getContext());
+                                Intent sendIntent = new Intent();
+                                sendIntent.setAction(Intent.ACTION_SEND);
+                                sendIntent.putExtra(Intent.EXTRA_TEXT,
+                                        db.readDataByDate(adapter.getItem(pos).substring(25,44)));
+                                sendIntent.setType("text/plain");
+                                startActivity(sendIntent);
                                 return true;
                             case R.id.cm_delete_id:
                                 db = new HelperFragmentHistoryDBWorked(getContext());
@@ -144,58 +143,16 @@ public class FragmentHistory extends Fragment {
         FragmentTransaction thisfragment = getFragmentManager().beginTransaction();
         thisfragment.detach(this).attach(this).commit();
     }
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v,
-                                    ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        menu.add(1, CM_OPEN_ID, 1, R.string.open_full);
-        menu.add(2, CM_COPY_ID, 2, R.string.copy_into_clip_item);
-        menu.add(3, CM_DELETE_ID, 3, R.string.delete_item);
-    }
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        if (item.getItemId() == CM_DELETE_ID) {
-            AdapterView.AdapterContextMenuInfo acmi = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        //    Log.d(TAG, "titledelete=" + adapter.getItem(acmi.position).substring(25,44));
-            db = new HelperFragmentHistoryDBWorked(getContext());
-            // cut the timestamp
-            db.removeItem(adapter.getItem(acmi.position).substring(25,44));
-            reCreateThisFragment();
-            return true;
-        }
-        else if (item.getItemId() == CM_OPEN_ID) {
-            AdapterView.AdapterContextMenuInfo acmi = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-       //       Log.d(TAG, "titleopen=" + adapter.getItem(acmi.position).substring(25,44));
-            db = new HelperFragmentHistoryDBWorked(getContext());
-            dialog_frg = new FragmentDialog();
-            Bundle bundle = new Bundle();
-            bundle.putString("data", db.readDataByDate(adapter.getItem(acmi.position).substring(25,44)));
-            dialog_frg.setArguments(bundle);
-            dialog_frg.show(getFragmentManager(), "");
-            return true;
-        }
-        else if (item.getItemId() == CM_COPY_ID) {
-            AdapterView.AdapterContextMenuInfo acmi = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-       //     Log.d(TAG, "titlecopy=" + adapter.getItem(acmi.position).substring(25,44));
-            db = new HelperFragmentHistoryDBWorked(getContext());
-            clipWrite(db.readDataByDate(adapter.getItem(acmi.position).substring(25,44)));
-       //     Log.d(TAG, "MENUPOS" + acmi.position);
-            Toast toast = Toast.makeText(getContext(), R.string.data_copyed_into_clip, Toast.LENGTH_SHORT);
-            toast.show();
-            return true;
-        }
-        return super.onContextItemSelected(item);
-    }
 
-    private void clipWrite(String textforwriteclip){
+    private void clipWrite(String text_for_write_clip){
         try{
             ServiceInterCloud.trigger = true;
             android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getContext().getSystemService(getContext().CLIPBOARD_SERVICE);
-            android.content.ClipData clip = android.content.ClipData.newPlainText("clip", textforwriteclip);
+            android.content.ClipData clip = android.content.ClipData.newPlainText("clip", text_for_write_clip);
             clipboard.setPrimaryClip(clip);}
-        catch (Exception errorwriteclip){
+        catch (Exception error_write_clip){
+            error_write_clip.printStackTrace();
         }
-        //     Log.d(TAG, "write=" + textforwriteclip);
     }
     private String loadCookie() {
         sPref = getActivity().getPreferences(MODE_PRIVATE);

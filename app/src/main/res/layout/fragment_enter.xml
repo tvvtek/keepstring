@@ -49,7 +49,7 @@
             android:textColorHint="@color/colorEditTextHint"
             android:maxLength="30"
             android:textSize="20dp"
-            android:digits="0,1,2,3,4,5,6,7,8,9,*,QWERTYUIOPASDFGHJKLZXCVBNM_-@qwertzuiopasdfghjklyxcvbnm"
+            android:digits="0,1,2,3,4,5,6,7,8,9,*,QWERTYUIOPASDFGHJKLZXCVBNM_-@.+qwertzuiopasdfghjklyxcvbnm"
             android:layout_marginTop="20dp"
             android:background="@drawable/shape_edit_text_metdesign"
             android:id="@+id/settings_enter_login" />

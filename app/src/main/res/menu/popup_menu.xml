@@ -6,6 +6,9 @@
         android:id="@+id/cm_copy_id"
         android:title="@string/copy_into_clip_item"/>
     <item
+        android:id="@+id/cm_share_id"
+        android:title="@string/share_item"/>
+    <item
         android:id="@+id/cm_delete_id"
         android:title="@string/delete_item"/>
 </menu>

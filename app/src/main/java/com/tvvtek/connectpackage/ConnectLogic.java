@@ -16,7 +16,7 @@ import okhttp3.Response;
 
 public class ConnectLogic implements ConnectLogicInterface {
     private volatile int now_state_request_result = 2;
-    String data_from_server = "";
+    private String data_from_server = "";
     StaticSettings staticSettings;
     private String script_name = null;
     private String request[] = null;
@@ -31,7 +31,7 @@ public class ConnectLogic implements ConnectLogicInterface {
     private String serverAddress = staticSettings.getUrl();
     /**
      *  params:
-        flag (0 - enter, 1 - register , 2 - write clip, 3 - read clip)
+        flag (0 - enter, 1 - register , 2 - write clip, 3 - read clip, 4 - read md5 summ clip)
         login ( login register or enter)
         password ( password register or enter)
         email (for register)
@@ -66,7 +66,7 @@ public class ConnectLogic implements ConnectLogicInterface {
                         } else {
                             data_from_server = response.body().string(); //
                             now_state_request_result = 1;
-                            //  Log.d(staticSettings.getLogTag(), "OK INET");
+                         //   Log.d(staticSettings.getLogTag(), "OK INET" + data_from_server);
                         }
                 } catch (Exception error_connect) {
                     now_state_request_result = 0;

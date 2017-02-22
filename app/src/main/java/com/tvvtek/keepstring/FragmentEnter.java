@@ -123,7 +123,6 @@ public class FragmentEnter extends Fragment {
                 String data_from_thread_io_enter;
                 data_from_thread_io_enter = bundle.getString("1");
                 // for enter
-
                 if (data_from_thread_io_enter.equals("0")) // error enter, login or pass not valid
                 {
                     btnEnter.setEnabled(true);
@@ -169,10 +168,9 @@ public class FragmentEnter extends Fragment {
 
 // -------------------------------------------------------------------------------------------------
         btnEnter.setOnClickListener(new View.OnClickListener(){public void onClick(View myView) {
-            if (    enterLogin.length() >= staticSettings.getMinLoginPass()
-                    && enterLogin.length() <= staticSettings.getMaxLoginPass())
+            if (    enterLogin.length() > staticSettings.getMinLoginPass()
+                    && enterLogin.length() < staticSettings.getMaxLoginPass())
             {
-                login = null;
                 login = enterLogin.getText().toString();
                 btnEnter.setEnabled(false);
                 // Thread per operations

@@ -15,7 +15,7 @@ public final class StaticSettings {
     private static int time_timeout_request = 10;
     private static int time_splash_screen = 2000; // ms
 
-    private static int minLoginPass = 5;
+    private static int minLoginPass = 3;
     private static int maxLoginPass = 30;
 
     public static String getUrl() {

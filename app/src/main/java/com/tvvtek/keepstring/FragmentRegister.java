@@ -126,8 +126,8 @@ public class FragmentRegister extends Fragment implements InterfaceOnBackPressed
                 toast.show();
                 return;
             }
-            if (    registerLogin.length() >= staticSettings.getMinLoginPass()
-                    && registerLogin.length() <= staticSettings.getMaxLoginPass())
+            if (    registerLogin.length() > staticSettings.getMinLoginPass()
+                    && registerLogin.length() < staticSettings.getMaxLoginPass())
             {
                 btnRegister.setEnabled(false);
                 progressBarRegister.setVisibility(View.VISIBLE);
