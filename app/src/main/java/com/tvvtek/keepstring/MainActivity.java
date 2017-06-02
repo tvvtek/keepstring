@@ -1,7 +1,7 @@
 package com.tvvtek.keepstring;
 
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -25,7 +25,6 @@ public class MainActivity extends AppCompatActivity
 
     StaticSettings staticSettings;
     private static String keyinsidedevice = "";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         if (savedInstanceState != null){
@@ -49,7 +48,7 @@ public class MainActivity extends AppCompatActivity
             overridePendingTransition(R.anim.slide_transform,R.anim.alpha);
         }
         setContentView(R.layout.activity_main);
-        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+    //    setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -97,14 +96,14 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
         if (id == R.id.nav_home) {
             fragmentClass = FragmentEnter.class; // переходим на стартовый экран
-        } else if (id == R.id.nav_history) {
-            fragmentClass = FragmentHistory.class;
-        } else if (id == R.id.nav_manual_mode) {
+        }
+        else if (id == R.id.nav_manual_mode) {
             fragmentClass = FragmentManualMode.class;
         }  else if (id == R.id.nav_pin) {
             fragmentClass = FragmentPinAccess.class; // фрагмент регистрации, входа и включения синхронизации
+        }else if (id == R.id.nav_history) {
+            fragmentClass = FragmentHistory.class;
         } else if (id == R.id.nav_help) {
-
             Intent questionIntent = new Intent(this,
                     HelpSliderActivity.class);
             startActivity(questionIntent);
@@ -150,7 +149,6 @@ public class MainActivity extends AppCompatActivity
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(openFileInput("key")));
             while ((key_into_device = br.readLine()) != null) {
-                //    Log.d(TAG, "fileread=" + g);
                 setKey(key_into_device);
             }
         } catch (FileNotFoundException e) {
@@ -158,5 +156,9 @@ public class MainActivity extends AppCompatActivity
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
     }
 }

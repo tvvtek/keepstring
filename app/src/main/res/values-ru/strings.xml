@@ -9,7 +9,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Настройки</string>
-    <string name="app_name_with_version">KeepString v1.09</string>
+    <string name="app_name_with_version">KeepString v1.14</string>
 
     <!-- App name -->
     <string name="app_name">KeepString</string>
@@ -17,9 +17,9 @@
     <!-- menu name -->
     <string name="text_save">Отправить</string>
     <string name="text_get">Получить</string>
-    <string name="text_home">KeepString</string>
+    <string name="text_home">Основное</string>
     <string name="text_cloud">Синхронизация</string>
-    <string name="text_pin">Доступ по пин</string>
+    <string name="text_pin">Доступ по PIN</string>
     <string name="text_manual">Ручной режим</string>
     <string name="text_history">История</string>
     <string name="text_help">Помощь</string>
@@ -40,8 +40,8 @@
     <string name="placeholder_enterpin">" Ваш код"</string>
     <string name="youpinis">" Ваш пин:"</string>
     <string name="youdata">" Ваши данные:"</string>
-    <string name="clipboardnow">Содержимое буфера обмена сейчас:</string>
-    <string name="activity_cloud_manual_text_info1">Введите текст, нажмите Сохранить. Данные запишутся во все буферы обмена на устройствах.</string>
+    <string name="clipboardnow">Содержимое буфера обмена:</string>
+    <string name="activity_cloud_manual_text_info1">Введите текст, нажмите Отправить. Данные запишутся во все буферы обмена на устройствах.</string>
     <string name="activity_cloud_manual_text_info2">Вывести содержимое буфера обмена</string>
     <string name="activity_cloud_manual_text_info3">Содержимое буфера обмена</string>
     <string name="start_mode">"Этот режим позволяет получать данные по пин коду."</string>
@@ -55,12 +55,16 @@
     <string name="cleanHistory">Очистить историю</string>
     <string name="exit">Выход</string>
     <string name="re_readclipboard">перечитать буфер</string>
-    <string name="switch_autoupdate">Включить фоновую синхронизацию</string>
+    <string name="switch_autoupdate">Включить синхронизацию</string>
     <string name="switch_notification">Включить уведомления</string>
+    <string name="switch_auto_start">Включить автозапуск</string>
+    <string name="switch_sleep_sync">Синхронизация в спящем режиме</string>
+    <string name="switch_dialog_before_sync">Отображать диалог перед синхронизацией</string>
 
     <!-- Toast -->
     <string name="error_input_pin_get">Пин код должен быть от 6 до 10 символов.</string>
     <string name="error_input_data_write">Данные слишком короткие!</string>
+    <string name="input_data_write_manual_ok">Скопировано в буфер!</string>
     <string name="error_login_pass">логин или пароль слишком короткие!</string>
     <string name="error_enter">Логин или пароль неверные!</string>
     <string name="register_ok">Регистрация завершена, войдите, используя логин и пароль!</string>
@@ -74,6 +78,7 @@
     <string name="data_copyed_into_clip">Данные скопированы в буфер обмена!</string>
     <string name="you_pin_is_not_found">Введенный пин код не существует!</string>
     <string name="error_invalid_responce">Invalid response from the server!</string>
+    <string name="auto_start_service">Запускаем KeepString!</string>
     <!-- Notification -->
     <string name="notification_name">KeepString получено:</string>
     <string name="notification_data">Новые данные записаны в буфер обмена</string>
@@ -114,11 +119,16 @@ If you do not enter a PIN code, it will be generated automatically.</string>
 
     <!-- For help slide2 -->
     <string name="slide2_1">Сверните приложение и оно продолжит работу в фоновом режиме</string>
-    <string name="slide2_2">Включится перехватчик буфера обмена, который в режиме реального времени синхронизирует ваш буфер обмена с другими устройствами, на которых вы выполнили вход в свой аккаунт.</string>
+    <string name="slide2_2">Данные синхронизируются автоматически фоновым процессом.</string>
     <string name="slide2_3">Данные синхронизируются по признаку "самые новые", т.е. вам достаточно скопировать любой фрагмент текста в любом приложении, как он будет автоматически перехвачен, синхронизирован и добавлен в базу данных на вашем устройстве, для просмотра истории операций. На другие устройства придет уведомление о том, что их буфер обмена синхронизирован и данные также запишутся в их локальную базу данных</string>
     <string name="slide2_4">Клиент-серверное взаимодействие осуществляется по зашифрованному протоколу и недоступно третьим лицам.</string>
 
     <!-- For help slide1 -->
-    <string name="slide3_1">Имеется веб версия, вы можете выполнить вход в свой аккаунт и записывать-читать данные из синхронизированных буферов обмена ваших устройств прямо на сайте!</string>
+    <string name="slide3_1">Ваш единый буфер обмена доступен на сайте приложения под тем же аккаунтом!</string>
     <string name="slide3_2">Сервис предоставляется бесплатно, не осуществляет рассылку, не собирает информацию о владельце телефона за исключением логина, пароля и электронной почты.</string>
+
+    <!-- For notification before sync -->
+    <string name="notification_before_sync">Выберите действие:</string>
+    <string name="notification_before_sync_button_sync">Синхронизировать</string>
+    <string name="notification_before_sync_button_skip">Пропустить</string>
 </resources>

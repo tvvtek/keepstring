@@ -1,57 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.tvvtek.keepstring" >
+    android:installLocation="internalOnly"
+    package="com.tvvtek.keepstring">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-feature android:name="android.hardware.telephony" android:required="false" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.QUICKBOOT_POWERON" />
+
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/icon"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
-            android:name="com.tvvtek.keepstring.SplashScreen"
+            android:name=".SplashScreen"
             android:theme="@style/Theme.Splash">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
-            android:name="com.tvvtek.keepstring.HelpSliderActivity"
+            android:name=".HelpSliderActivity"
             android:label="@string/app_name"
             android:theme="@style/Base.V7.Theme.AppCompat">
             android:windowSoftInputMode="stateHidden"
         </activity>
         <activity
-            android:name="com.tvvtek.keepstring.MainActivity"
+            android:name=".MainActivity"
             android:label="@string/app_name"
-            android:windowSoftInputMode="stateHidden"
-            android:theme="@style/AppTheme.NoActionBar" >
-        </activity>
-        <activity
-            android:name="com.tvvtek.keepstring.FragmentRegister"
-            android:label="@string/app_name"
-            android:windowSoftInputMode="stateHidden"
-            android:theme="@style/AppTheme.NoActionBar" >
-        </activity>
-        <activity
-            android:name="com.tvvtek.keepstring.FragmentDialog"
-            android:windowSoftInputMode="stateHidden"
-            android:configChanges="orientation|screenSize">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                />
-            </intent-filter>
-        </activity>
-        <service
-            android:name="com.tvvtek.keepstring.ServiceInterCloud"
-            android:enabled="true"
-            android:exported="false"></service>
-    </application>
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden"></activity>
 
+        <service
+            android:name=".ServiceInterCloud"
+            android:enabled="true"
+            android:exported="false" />
+
+        <receiver
+            android:name=".MyReceiverAutoStart" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".MyReceiverNotification">
+            <intent-filter>
+                <action android:name="YES_ACTION"/>
+                <action android:name="STOP_ACTION"/>
+            </intent-filter>
+        </receiver>
+    </application>
 
 </manifest>

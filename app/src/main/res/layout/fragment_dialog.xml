@@ -13,14 +13,14 @@
         android:layout_marginTop="20dp"
         android:layout_marginBottom="5dp"
         android:orientation="vertical"
-        android:background="@drawable/edittext"
+        android:background="@drawable/text_view_dialog_data"
         >
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="45dp"
         android:orientation="horizontal"
-        android:background="@drawable/edittext"
+        android:background="@drawable/text_view_dialog_data"
         >
         <ImageView
             android:layout_width="48dp"
@@ -45,7 +45,7 @@
             android:layout_gravity="center"
             android:textSize="18dp"
             android:textIsSelectable="true"
-            android:background="@color/colorBackground_dialog_text"
+            android:background="@drawable/background_main_gradient"
             android:textColor="@color/colorInfoText"
             android:onClick="dialog_text_data"
             android:id="@+id/dialog_text_data" />

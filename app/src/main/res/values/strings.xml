@@ -13,14 +13,14 @@
 
     <!-- App name -->
     <string name="app_name">KeepString</string>
-    <string name="app_name_with_version">KeepString v1.09</string>
+    <string name="app_name_with_version">KeepString v1.14</string>
     <string name="description_app">Clipboard Manager</string>
     <!-- menu name -->
     <string name="text_save">Send</string>
     <string name="text_get">Get</string>
-    <string name="text_home">KeepString</string>
+    <string name="text_home">Main</string>
     <string name="text_cloud">Sync</string>
-    <string name="text_pin">Access by pin</string>
+    <string name="text_pin">Access by PIN</string>
     <string name="text_manual">Manual mode</string>
     <string name="text_history">History</string>
     <string name="text_help">Help</string>
@@ -42,7 +42,7 @@
     <string name="youpinis">" Your pin:"</string>
     <string name="youdata">" Your data:"</string>
     <string name="clipboardnow">The contents of the clipboard:</string>
-    <string name="activity_cloud_manual_text_info1">Enter the text, then click Save. And he will be synchronized on all devices including this</string>
+    <string name="activity_cloud_manual_text_info1">Enter the text, then click Send. And he will be synchronized on all devices including this</string>
     <string name="activity_cloud_manual_text_info2">Read the contents of the clipboard</string>
     <string name="activity_cloud_manual_text_info3">The contents of the clipboard</string>
     <string name="start_mode">"This mode allows you to store or retrieve data on the pin code."</string>
@@ -56,12 +56,16 @@
     <string name="cleanHistory">Clean history</string>
     <string name="exit">Exit</string>
     <string name="re_readclipboard">re-read clip</string>
-    <string name="switch_autoupdate">Enable background synchronization</string>
+    <string name="switch_autoupdate">Enable synchronization</string>
     <string name="switch_notification">Enable notifications</string>
+    <string name="switch_auto_start">Enable autorun KeepString</string>
+    <string name="switch_sleep_sync">Synchronize in sleep mode</string>
+    <string name="switch_dialog_before_sync">Display dialog before synchronization</string>
 
     <!-- Toast -->
     <string name="error_input_pin_get">Pin code should be from 6 to 10 symbols.</string>
     <string name="error_input_data_write">Your data is short!</string>
+    <string name="input_data_write_manual_ok">It copied to clipboard!</string>
     <string name="error_login_pass">Your login or password short!</string>
     <string name="error_enter">Your login or password not valid!</string>
     <string name="register_ok">Registration is successful, you can sign using your username and password!</string>
@@ -75,6 +79,7 @@
     <string name="save_auth_data_written_pinexist">This pin code already exists!</string>
     <string name="data_copyed_into_clip">Data copied to the clipboard!</string>
     <string name="you_pin_is_not_found">You pin is not found!</string>
+    <string name="auto_start_service">Run KeepString!</string>
     <!-- Notification -->
     <string name="notification_name">KeepString received:</string>
     <string name="notification_data">The new data is written to the clipboard</string>
@@ -82,7 +87,7 @@
     <!-- Settings data -->
     <string name="login_hint">" Login"</string>
     <string name="pass_hint">"Password"</string>
-    <string name="pass_hint_conf">" Confirm pass"</string>
+    <string name="pass_hint_conf">"Confirm pass"</string>
     <string name="email_hint">" Email"</string>
 
     <!-- help data fragment_help -->
@@ -115,11 +120,16 @@ If you do not enter a PIN code, it will be generated automatically.</string>
 
     <!-- For help slide2 -->
     <string name="slide2_1">Fold the application and it will continue to work in the background</string>
-    <string name="slide2_2">It turns interceptor clipboard, which in real time synchronize your clipboard with other devices on which you are logged into your account.</string>
+    <string name="slide2_2">Data is automatically synchronized with the background process.</string>
     <string name="slide2_3">Data is synchronized on the basis of "the latest", you can simply copy any piece of text in any application, as it will be automatically intercepted, synchronized and added to the database on your device to view transaction history. On the other device will be notified that their clipboard and synchronized data is also written in their local database.</string>
     <string name="slide2_4">Client-server interaction is carried out via an encrypted protocol, and is not available to third parties.</string>
 
     <!-- For help slide1 -->
-    <string name="slide3_1">There is a web version, you can log into your account and write-read the data from the synchronized clipboards your devices directly on the site!</string>
+    <string name="slide3_1">Your single clipboard is available on the application site under the same account!</string>
     <string name="slide3_2">The service is provided free of charge, does not effect the communication does not collect information about the phone owner except for the login, password and e-mail.</string>
+
+    <!-- For notification before sync -->
+    <string name="notification_before_sync">Sync or skip?</string>
+    <string name="notification_before_sync_button_sync">Sync</string>
+    <string name="notification_before_sync_button_skip">Skip</string>
 </resources>

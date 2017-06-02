@@ -37,6 +37,7 @@ public class FragmentManualMode extends Fragment {
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        setRetainInstance(true);
         if (loadCookie().length() == 128){
             return onCreateViewAuthOk(inflater, container, savedInstanceState);
         }
@@ -59,6 +60,8 @@ public class FragmentManualMode extends Fragment {
             }
             else {
                 clipWrite(input_send_to_clip.getText().toString());
+                Toast toast = Toast.makeText(getContext(), R.string.input_data_write_manual_ok, Toast.LENGTH_SHORT);
+                toast.show();
             }
         }});
         btnRead.setOnClickListener(new View.OnClickListener(){public void onClick(View myView) {
@@ -128,5 +131,9 @@ public class FragmentManualMode extends Fragment {
             fragManager.beginTransaction().replace(R.id.container, fragment).commit();
         }catch (Exception h){
         }
+    }
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
     }
 }

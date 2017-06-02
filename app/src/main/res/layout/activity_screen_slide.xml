@@ -7,7 +7,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorTitle">
+        android:background="@drawable/background_main_gradient">
         <ImageView
             android:layout_width="48dp"
             android:layout_height="48dp"

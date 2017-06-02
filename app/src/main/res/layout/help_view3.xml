@@ -1,69 +1,76 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/scrollView1"
-    android:background="@color/colorBackground"
+    android:background="@drawable/background_main_gradient"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="match_parent">
 
-    >
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/content"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:layout_gravity="center"
-    android:background="@color/colorBackground"
-    >
-    <TextView
-        android:text="@string/slide3_1"
-        android:textSize="25dp"
-        android:paddingLeft="30dp"
-        android:paddingRight="30dp"
-        android:paddingTop="10dp"
-        android:layout_width="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:textColor="@color/colorInfoText"
-        android:foregroundGravity="center"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <Button
-        android:text="Go web"
-        android:layout_width="200dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="30dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/button"
-        android:textColor="@color/colorBackground"
-        android:id="@+id/button_go_web_version"
-        android:layout_weight="1" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:layout_weight="1"
+            android:foregroundGravity="center"
+            android:gravity="center"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:text="3"
+            android:textColor="@color/colorInfoText"
+            android:textSize="90dp" />
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/slider3" />
 
-    <TextView
-        android:text="@string/slide3_2"
-        android:textSize="16dp"
-        android:paddingLeft="30dp"
-        android:paddingRight="30dp"
-        android:paddingTop="30dp"
-        android:paddingBottom="20dp"
-        android:layout_width="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:textColor="@color/colorInfoText"
-        android:foregroundGravity="center"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" />
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:layout_weight="1"
+            android:background="@drawable/edit_text_custom_for_help_slider_text"
+            android:foregroundGravity="center"
+            android:gravity="center"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:text="@string/slide3_1"
+            android:textColor="@color/colorInfoText"
+            android:textSize="25dp" />
 
-    <ImageView
-        android:layout_width="70dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:foregroundGravity="center"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:src="@drawable/sel3"
-        android:id="@+id/image_for_help_slide3"
-        android:text="" />
-</LinearLayout>
-    </ScrollView>
+        <Button
+            android:text="Go web"
+            android:layout_width="200dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_selector"
+            android:textColor="@color/colorBackground"
+            android:id="@+id/button_go_web_version"
+            android:layout_weight="1" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:layout_weight="1"
+            android:background="@drawable/edit_text_custom_for_help_slider_text"
+            android:foregroundGravity="center"
+            android:gravity="center"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:text="@string/slide3_2"
+            android:textColor="@color/colorInfoText"
+            android:textSize="15dp" />
+
+    </LinearLayout>
+</ScrollView>

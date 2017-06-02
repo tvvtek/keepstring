@@ -12,6 +12,7 @@ import com.tvvtek.interfaces.InterfaceForIODataBase;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.GregorianCalendar;
 
 public class HelperFragmentHistoryDBWorked implements InterfaceForIODataBase {
@@ -91,6 +92,7 @@ public class HelperFragmentHistoryDBWorked implements InterfaceForIODataBase {
         }catch (Exception db_read_error){
             Log.d(staticSettings.getLogTag(), db_read_error.toString());
         }
+        Collections.reverse(result_db); // reverse list for put new elements is up position
         return result_db;
     }
 

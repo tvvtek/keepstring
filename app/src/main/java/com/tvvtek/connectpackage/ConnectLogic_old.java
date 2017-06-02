@@ -14,7 +14,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class ConnectLogic implements ConnectLogicInterface {
+public class ConnectLogic_old implements ConnectLogicInterface {
     private volatile int now_state_request_result = 2;
     private String data_from_server = "";
     StaticSettings staticSettings;

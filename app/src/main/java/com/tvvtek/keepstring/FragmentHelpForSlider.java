@@ -37,4 +37,8 @@ public class FragmentHelpForSlider extends Fragment {
             return this_view3;
         }
     }
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+    }
 }

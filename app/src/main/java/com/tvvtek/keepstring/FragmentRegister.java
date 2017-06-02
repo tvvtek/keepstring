@@ -2,14 +2,17 @@ package com.tvvtek.keepstring;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -18,7 +21,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.tvvtek.connectpackage.ConnectLogic;
+import com.tvvtek.connectpackage.ConnectLogic_old;
 import com.tvvtek.interfaces.InterfaceOnBackPressedListener;
 
 public class FragmentRegister extends Fragment implements InterfaceOnBackPressedListener {
@@ -31,8 +34,8 @@ public class FragmentRegister extends Fragment implements InterfaceOnBackPressed
     StaticSettings staticSettings;
     private FragmentActivity myContext;
     private volatile String result = "";
-    private Integer result_trigger = 0;
-
+    private boolean state_switch_pass = false;
+    private boolean state_switch_pass_confirm = false;
     /**
      * @param context
      * Receive app Context for receive Activity, for interception Back hardware button
@@ -53,19 +56,16 @@ public class FragmentRegister extends Fragment implements InterfaceOnBackPressed
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View myView = inflater.inflate(R.layout.fragment_register, container, false);
+        setRetainInstance(true);
         enter_help_text = (TextView)myView.findViewById(R.id.enter_help_text);
         progressBarRegister = (ProgressBar)myView.findViewById(R.id.progressBarRegister);
-
         register_help_text = (TextView)myView.findViewById(R.id.register_help_text);
-
         registerLogin = (EditText)myView.findViewById(R.id.settings_reg_login);
         registerPass = (EditText)myView.findViewById(R.id.settings_reg_pass);
         registerPassConfirm = (EditText)myView.findViewById(R.id.settings_reg_pass_confirm);
         registerEmail = (EditText)myView.findViewById(R.id.settings_reg_email);
         btnRegister = (Button)myView.findViewById(R.id.btn_register);
-
         progressBarRegister.setVisibility(View.INVISIBLE);
-
 /**
 * Section handler for update Viev form thread into section btnRegister
 */
@@ -137,7 +137,7 @@ public class FragmentRegister extends Fragment implements InterfaceOnBackPressed
                     public void run() {
                         Message message = handler_register.obtainMessage();
                         Bundle bundle = new Bundle();
-                        ConnectLogic connect = new ConnectLogic(); // For server connect and send data
+                        ConnectLogic_old connect = new ConnectLogic_old(); // For server connect and send data
                         connect.setScriptName("cloudapi.php");
                      //   connect.setScriptName("print.php"); // this variant for testing setRequest POST data
                         String[] request_register = {"flag", "1",
@@ -181,13 +181,56 @@ public class FragmentRegister extends Fragment implements InterfaceOnBackPressed
                 toast.show();
             }
         }});
+        /**
+         * this click listener for right drawable inside password input
+         */
+        registerPass.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                final int DRAWABLE_RIGHT = 2;
+                if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                    if(event.getRawX() >= (registerPass.getRight() - registerPass.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        if (!state_switch_pass) {
+                          //  Log.d(staticSettings.getLogTag(), "1111=" + registerPass.getInputType());
+                            registerPass.setInputType(InputType.TYPE_CLASS_TEXT);
+                            state_switch_pass = true;
+                        }
+                        else {
+                            registerPass.setInputType(129);
+                            state_switch_pass = false;
+                        }
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+        registerPassConfirm.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                final int DRAWABLE_RIGHT = 2;
+                if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                    if(event.getRawX() >= (registerPassConfirm.getRight() - registerPassConfirm.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        if (!state_switch_pass_confirm) {
+                            registerPassConfirm.setInputType(InputType.TYPE_CLASS_TEXT);
+                            state_switch_pass_confirm = true;
+                        }
+                        else {
+                            registerPassConfirm.setInputType(129);
+                            state_switch_pass_confirm = false;
+                        }
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
         return myView;
     }
     @Override
     public void onBackPressed() {
         goEnterFragment();
     }
-
     /**
      * Section goBack previous fragment
      * Go Enter Fragment
@@ -204,5 +247,13 @@ public class FragmentRegister extends Fragment implements InterfaceOnBackPressed
         }catch (Exception error_replace_fragment){
             error_replace_fragment.printStackTrace();
         }
+    }
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+    }
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
     }
 }

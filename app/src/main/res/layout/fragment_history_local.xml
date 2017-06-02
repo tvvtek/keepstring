@@ -4,32 +4,35 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/colorBackground"
+    android:background="@drawable/background_main_gradient"
     tools:context="com.tvvtek.keepstring.MainActivity">
 
     <EditText
         android:id="@+id/editText"
         android:layout_width="match_parent"
         android:layout_height="36dp"
-        android:maxLength="10"
-        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp"
-        android:paddingBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/edit_text_search_fragment"
         android:drawableLeft="@drawable/ic_search"
-        android:hint="@string/search"
-        android:textColor="@color/colorInfoText"
-        android:textColorHint="@color/colorEditTextHint"
-        android:background="@drawable/shape_edit_text_metdesign_shadow"
+        android:drawablePadding="10dp"
         android:gravity="left"
-        android:layout_centerHorizontal="true" />
+        android:hint="@string/search"
+        android:maxLength="10"
+        android:paddingBottom="10dp"
+        android:textColor="@color/colorEditTextHint"
+        android:textColorHint="@color/colorEditTextHint" />
 
     <ListView
         android:id="@+id/lv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/editText"
+        android:divider="@color/colorSeparatorLineListView"
+        android:dividerHeight="4px"
         android:layout_centerHorizontal="true" />
 
 </LinearLayout>

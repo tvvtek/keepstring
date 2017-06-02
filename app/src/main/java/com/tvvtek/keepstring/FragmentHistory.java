@@ -65,6 +65,7 @@ public class FragmentHistory extends Fragment {
         if (savedInstanceState != null){
             savedInstanceState.clear();
         }
+        setRetainInstance(true);
         // -----------------------
         final View myView = inflater.inflate(R.layout.fragment_history_local, container, false);
         db = new HelperFragmentHistoryDBWorked(getContext());
@@ -173,5 +174,9 @@ public class FragmentHistory extends Fragment {
             fragManager.beginTransaction().replace(R.id.container, fragment).commit();
         }catch (Exception h){
         }
+    }
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
     }
 }

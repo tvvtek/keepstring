@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#3F51B5</color>
+    <color name="colorStartGradient">#0b5692</color>
+    <color name="colorEndGradient">#002f43</color>
+    <color name="colorTitleBar">#00354b</color>
+    <color name="colorCornerEditTextHelpSlider">#1c779c</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorBackground">#02607b</color>
@@ -21,4 +25,6 @@
     <color name="colorEditTextCorner">#80bfd1</color>
     <color name="colorButtonBackground">#c2d5da</color>
     <color name="colorTextLink">#54d426</color>
+
+    <color name="colorSeparatorLineListView">#5aa98b</color>
 </resources>

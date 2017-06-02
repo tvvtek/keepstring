@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/app_bar_main"
-    android:background="@color/colorBackground"
-    tools:context="com.tvvtek.keepstringnew.com.tvvtek.keepstring.MainActivity">
+    android:background="@color/colorEndGradient"
+    tools:context="com.tvvtek.keepstring.MainActivity">
     >
 </RelativeLayout>

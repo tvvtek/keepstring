@@ -15,7 +15,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.tvvtek.connectpackage.ConnectLogic;
+import com.tvvtek.connectpackage.ConnectLogic_old;
 
 public class FragmentPinAccess extends Fragment {
     StaticSettings staticSettings;
@@ -35,6 +35,7 @@ public class FragmentPinAccess extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View myView = inflater.inflate(R.layout.fragment_pin_access, container, false);
+        setRetainInstance(true);
         input_pin_get = (EditText)myView.findViewById(R.id.input_pin_get_authok);
         input_received_data = (EditText)myView.findViewById(R.id.input_received_data);
         input_pin_save = (EditText)myView.findViewById(R.id.input_pin_authok);
@@ -111,7 +112,7 @@ public class FragmentPinAccess extends Fragment {
                         public void run() {
                             Message message = handleroverall_manual_mode.obtainMessage();
                             Bundle bundle = new Bundle();
-                            ConnectLogic connect = new ConnectLogic(); // For server connect and send data
+                            ConnectLogic_old connect = new ConnectLogic_old(); // For server connect and send data
                             connect.setScriptName("getapi.php");
                             //   connect.setScriptName("print.php"); // this variant for testing setRequest POST data
                             String[] request_register = {
@@ -174,7 +175,7 @@ public class FragmentPinAccess extends Fragment {
                         public void run() {
                             Message message = handleroverall_manual_mode.obtainMessage();
                             Bundle bundle = new Bundle();
-                            ConnectLogic connect = new ConnectLogic(); // For server connect and send data
+                            ConnectLogic_old connect = new ConnectLogic_old(); // For server connect and send data
                             connect.setScriptName("saveapi.php");
                             //   connect.setScriptName("print.php"); // this variant for testing setRequest POST data
                             String[] request_register = {
@@ -239,5 +240,9 @@ public class FragmentPinAccess extends Fragment {
                         case MotionEvent.ACTION_UP:v.getParent().requestDisallowInterceptTouchEvent(false);
                             break;}}return false;}});
         return myView;
+    }
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
     }
 }

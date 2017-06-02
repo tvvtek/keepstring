@@ -1,7 +1,7 @@
 package com.tvvtek.keepstring;
 
 
-import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -26,7 +26,7 @@ public class HelpSliderActivity extends FragmentActivity {
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_screen_slide);
-        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+   //     setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         mPager = (ViewPager) findViewById(R.id.pager);
         arrow_back_title = (ImageView) findViewById(R.id.title_bar_back_button);
 
@@ -64,5 +64,9 @@ public class HelpSliderActivity extends FragmentActivity {
     }
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
+    }
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
     }
 }

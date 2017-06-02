@@ -1,7 +1,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/scrollView1"
-    android:background="@color/colorBackground"
+    android:background="@drawable/background_main_gradient"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
@@ -10,9 +10,8 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:layout_marginTop="10dp"
         android:orientation="vertical"
-        android:background="@color/colorBackground"
+        android:background="@drawable/background_main_gradient"
         android:weightSum="1">
 
         <ImageView
@@ -37,8 +36,8 @@
             android:id="@+id/register_help_text" />
 
         <EditText
-            android:layout_width="180dp"
-            android:layout_height="36dp"
+            android:layout_width="250dp"
+            android:layout_height="42dp"
             android:inputType="textPersonName"
             android:textColor="@color/colorInfoText"
             android:layout_gravity="center"
@@ -48,13 +47,14 @@
             android:textSize="20dp"
             android:digits="0,1,2,3,4,5,6,7,8,9,*,QWERTYUIOPASDFGHJKLZXCVBNM_-@.+qwertzuiopasdfghjklyxcvbnm"
             android:drawableLeft="@drawable/ic_person_outline"
+            android:drawablePadding="10dp"
             android:layout_marginTop="20dp"
-            android:background="@drawable/shape_edit_text_metdesign"
+            android:background="@drawable/edit_text_custom"
             android:id="@+id/settings_reg_login" />
 
         <EditText
-            android:layout_width="180dp"
-            android:layout_height="36dp"
+            android:layout_width="250dp"
+            android:layout_height="42dp"
             android:layout_gravity="center"
             android:inputType="textPassword"
             android:textColor="@color/colorInfoText"
@@ -63,12 +63,14 @@
             android:ems="10"
             android:textSize="20dp"
             android:drawableLeft="@drawable/ic_lock"
+            android:drawableRight="@drawable/ic_visibility_white_24dp"
+            android:drawablePadding="10dp"
             android:layout_marginTop="10dp"
-            android:background="@drawable/shape_edit_text_metdesign"
+            android:background="@drawable/edit_text_custom"
             android:id="@+id/settings_reg_pass" />
         <EditText
-            android:layout_width="180dp"
-            android:layout_height="36dp"
+            android:layout_width="250dp"
+            android:layout_height="42dp"
             android:layout_gravity="center"
             android:inputType="textPassword"
             android:textColor="@color/colorInfoText"
@@ -78,12 +80,14 @@
             android:textSize="20dp"
             android:layout_marginTop="10dp"
             android:drawableLeft="@drawable/ic_repeat"
-            android:background="@drawable/shape_edit_text_metdesign"
+            android:drawableRight="@drawable/ic_visibility_white_24dp"
+            android:drawablePadding="10dp"
+            android:background="@drawable/edit_text_custom"
             android:id="@+id/settings_reg_pass_confirm" />
 
         <EditText
-            android:layout_width="180dp"
-            android:layout_height="36dp"
+            android:layout_width="250dp"
+            android:layout_height="42dp"
             android:layout_gravity="center"
             android:inputType="textEmailAddress"
             android:textColor="@color/colorInfoText"
@@ -93,11 +97,12 @@
             android:textSize="20dp"
             android:layout_marginTop="10dp"
             android:drawableLeft="@drawable/ic_mail"
-            android:background="@drawable/shape_edit_text_metdesign"
+            android:drawablePadding="10dp"
+            android:background="@drawable/edit_text_custom"
             android:id="@+id/settings_reg_email" />
 
         <Button
-            android:layout_width="180dp"
+            android:layout_width="250dp"
             android:layout_height="36dp"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
