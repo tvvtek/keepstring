@@ -147,7 +147,7 @@ public class FragmentHistory extends Fragment {
 
     private void clipWrite(String text_for_write_clip){
         try{
-            ServiceInterCloud.trigger = true;
+            ServiceInterCloudFirebaseInclude.trigger = true;
             android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getContext().getSystemService(getContext().CLIPBOARD_SERVICE);
             android.content.ClipData clip = android.content.ClipData.newPlainText("clip", text_for_write_clip);
             clipboard.setPrimaryClip(clip);}

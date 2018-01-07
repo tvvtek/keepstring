@@ -23,7 +23,7 @@ public class MyReceiverAutoStart extends BroadcastReceiver {
         SharedPreferences sPref = ctx.getSharedPreferences("TAG", MODE_PRIVATE);
         if (sPref.getBoolean(APP_PREFERENCES_SWITCH_AUTOSTART, true)){
             try {
-                context.startService(new Intent(context, ServiceInterCloud.class)
+                context.startService(new Intent(context, ServiceInterCloudFirebaseInclude.class)
                         .putExtra("mode_state_io", true)
                         .putExtra("userkey", loadKeyFromDevice(context))
                         .putExtra("data in clipboard", ""));

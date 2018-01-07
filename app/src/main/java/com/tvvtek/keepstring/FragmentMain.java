@@ -25,8 +25,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -116,7 +114,7 @@ public class FragmentMain extends Fragment {
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         notificationManager.cancel(NOTIFY_ID);
         // Start service into data
-        context.startService(new Intent(context, ServiceInterCloud.class)
+        context.startService(new Intent(context, ServiceInterCloudFirebaseInclude.class)
                 .putExtra("mode_state_io", true)
                 .putExtra("userkey", loadCookie()));
         /**
@@ -137,7 +135,7 @@ public class FragmentMain extends Fragment {
         btnExit.setOnClickListener(new View.OnClickListener(){public void onClick(View myView) {
             saveCookie("", "");
             writeCookieOnFile("0");
-            getContext().stopService(new Intent(getContext(), ServiceInterCloud.class));
+            getContext().stopService(new Intent(getContext(), ServiceInterCloudFirebaseInclude.class));
             restartFirstActivity();
         }});
         btnRe_read.setOnClickListener(new View.OnClickListener(){public void onClick(View myView) {
@@ -177,15 +175,15 @@ public class FragmentMain extends Fragment {
                     editor.putBoolean(APP_PREFERENCES_SWITCH_SYNC, true);
                     editor.apply();
                     // Make PendingIntent for Task1
-                    getContext().stopService(new Intent(getContext(), ServiceInterCloud.class)); // стопарим и потом запускаем сервис
-                    getContext().startService(new Intent(getContext(), ServiceInterCloud.class)
+                    getContext().stopService(new Intent(getContext(), ServiceInterCloudFirebaseInclude.class)); // стопарим и потом запускаем сервис
+                    getContext().startService(new Intent(getContext(), ServiceInterCloudFirebaseInclude.class)
                             .putExtra("mode_state_io", true)
                             .putExtra("userkey", loadCookie())
                             .putExtra("data in clipboard", ""));
                 } else {
                     editor.putBoolean(APP_PREFERENCES_SWITCH_SYNC, false);
                     editor.apply();
-                    getContext().stopService(new Intent(getContext(), ServiceInterCloud.class));
+                    getContext().stopService(new Intent(getContext(), ServiceInterCloudFirebaseInclude.class));
                 }
             }
         });

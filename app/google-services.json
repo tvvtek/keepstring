@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "320123143609",
+    "firebase_url": "https://keepstring-2d324.firebaseio.com",
+    "project_id": "keepstring-2d324",
+    "storage_bucket": "keepstring-2d324.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:320123143609:android:13cc0ae9a6f8d7bb",
+        "android_client_info": {
+          "package_name": "com.tvvtek.keepstring"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "320123143609-8d18udktv2l85ngtr94mv21jrr943euo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgnGYm575IfakPixMIBJ65PlcriCtA6cU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

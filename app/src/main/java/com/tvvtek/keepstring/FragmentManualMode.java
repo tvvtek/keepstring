@@ -95,7 +95,7 @@ public class FragmentManualMode extends Fragment {
 
     private void clipWrite(String textforwriteclip){
         try{
-            ServiceInterCloud.trigger = true;
+            ServiceInterCloudFirebaseInclude.trigger = true;
         android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getContext().getSystemService(getContext().CLIPBOARD_SERVICE);
         android.content.ClipData clip = android.content.ClipData.newPlainText("clip", textforwriteclip);
         clipboard.setPrimaryClip(clip);}

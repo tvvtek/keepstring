@@ -40,9 +40,23 @@
             android:windowSoftInputMode="stateHidden"></activity>
 
         <service
-            android:name=".ServiceInterCloud"
+            android:name=".ServiceInterCloudFirebaseInclude"
             android:enabled="true"
             android:exported="false" />
+
+        <service
+            android:name=".MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
 
         <receiver
             android:name=".MyReceiverAutoStart" >

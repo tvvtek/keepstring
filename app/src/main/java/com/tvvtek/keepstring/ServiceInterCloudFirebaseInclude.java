@@ -33,7 +33,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.TimeUnit;
 
-public class ServiceInterCloud extends Service {
+public class ServiceInterCloudFirebaseInclude extends Service {
     StaticSettings staticSettings;
     HelperFragmentHistoryDBWorked db;
 
@@ -66,7 +66,7 @@ public class ServiceInterCloud extends Service {
         }
 
     };
-    public ServiceInterCloud() {
+    public ServiceInterCloudFirebaseInclude() {
     }
     @Override
     public void onCreate() {

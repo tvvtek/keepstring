@@ -10,14 +10,25 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.IBinder;
+import android.os.PowerManager;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
+import android.widget.RemoteViews;
 
-import com.tvvtek.connectpackage.ConnectLogic_old;
+import com.tvvtek.connectpackage.ConnectLogic;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.TimeUnit;
@@ -28,7 +39,8 @@ public class ServiceInterCloud_old extends Service {
 
     public final String APP_PREFERENCES_SWITCH_SYNC = "switch_sycn";
     public final String APP_PREFERENCES_SWITCH_NOTIFICATION = "switch_notification";
-    public final String APP_PREFERENCES_SWITCH_AUTOSTART = "switch_auto_start";
+    public final String APP_PREFERENCES_SWITCH_SLEEP_SYNC = "switch_sleep_sync";
+    public final String APP_PREFERENCES_DIALOG_BEFORE_SYNC = "switch_dialog_before_sync";
     private String data_from_server = "";
     private String data_from_server_md5 = "";
     private volatile boolean state_thread = true;
@@ -36,14 +48,17 @@ public class ServiceInterCloud_old extends Service {
     private volatile static String data_clipboard_first_start = "";
     private volatile static String data_clipboard_first_start_md5 = "";
     private volatile static String data_clipboard_ondevice = "";
-    private volatile static String data_clipboard_to_send = "";
+    private volatile static String data_clipboard_now = "";
     private volatile static String data_clipboard_md5 = "";
+    private volatile int trigger_send_receive_notification = 0;
     public volatile static boolean trigger = false;
+    private volatile boolean state_screen_on = false;
     private int position_space;
     private int count_thread = 0;
     // notification
     private static final int NOTIFY_ID = 100;
     private static String notification_data_to_present = "";
+    private static NotificationManager mNotificationManager;
 
     private ClipboardManager.OnPrimaryClipChangedListener listener = new ClipboardManager.OnPrimaryClipChangedListener() {
         public void onPrimaryClipChanged() {
@@ -57,6 +72,7 @@ public class ServiceInterCloud_old extends Service {
     public void onCreate() {
         Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
         ((ClipboardManager) getSystemService(CLIPBOARD_SERVICE)).addPrimaryClipChangedListener(listener);
+        mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         super.onCreate();
     }
 
@@ -70,7 +86,6 @@ public class ServiceInterCloud_old extends Service {
             data_clipboard_first_start = clipRead(); // read clipboard on device at first start
         }
         catch (Exception clipnothing){
-          //  Log.d(TAG, "Clip is empty");
         }
 
         try {
@@ -79,45 +94,56 @@ public class ServiceInterCloud_old extends Service {
          //   Log.d(TAG, "получили с интента, так как впервые=" + user_key_fromdevice);
         }catch (Exception key_is_there_is){
             user_key_fromdevice = loadKeyFromDevice();
-          //  Log.d(TAG, "загрузили с девайса, так как есть=" + user_key_fromdevice);
         }
-       // Log.d(TAG, "param1=" + user_key_fromdevice);
         // setRequest to server inside new thread
         Thread thread_cloud = new Thread(new Runnable() {
             public void run() {
-                ConnectLogic_old connect = new ConnectLogic_old(); // For server connect and send data
+             //   ConnectLogic connect = new ConnectLogic(); // For server connect and send data
+                PowerManager pm = (PowerManager) getApplicationContext().getSystemService(Context.POWER_SERVICE);
+                ConnectLogic connect = new ConnectLogic();
                 while (state_thread) {
-                //    Log.d(staticSettings.getLogTag(), "state_thread=true");
-                //    Log.d(staticSettings.getLogTag(), "trigger=" + trigger);
+                    SharedPreferences sPref = getSharedPreferences("TAG", MODE_PRIVATE);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
+                        state_screen_on = pm.isInteractive();
+                    } else {
+                        state_screen_on = pm.isScreenOn();
+                    }
                     try {
-                        TimeUnit.SECONDS.sleep(staticSettings.getTimePerUpdateData());
-                        connect.setScriptName("cloudapi.php");
-                        // Если true, значит дернули метод буфера обмена и есть новые данные, шлем их на сервер
-                        if (trigger){
-                            String[] request_new = {
-                                    "flag",  "2",
-                                    "cookie",  user_key_fromdevice,
-                                    "data",  data_clipboard_to_send,
-                                    "androidkey",  staticSettings.getAndroidKey(),};
-                            connect.setRequest(request_new);
-                            connect.work();
-                         //   while(connect.getStateRequest() == 2){}
-                            data_from_server = connect.getResponse();
-                            trigger = false;
-                            // send body ---------------------------------------------------------------
-                        //    Log.d(staticSettings.getLogTag(), "дернули метод буфера, шлем на сервак и получаем ответ=" + data_from_server);
+                        /**
+                         * Check on or off screen before send request
+                         */
+                        if (sPref.getBoolean(APP_PREFERENCES_SWITCH_SLEEP_SYNC, false)) state_screen_on = true;
+                        if(state_screen_on) {
+                            TimeUnit.SECONDS.sleep(staticSettings.getTimePerUpdateData());
+                            connect.setScriptName("cloudapi.php");
+                            // Если true, значит дернули метод буфера обмена и есть новые данные, шлем их на сервер
+                            if (trigger) {
+                                String[] request_new = {
+                                        "flag", "2",
+                                        "cookie", user_key_fromdevice,
+                                        "data", data_clipboard_now,
+                                        "androidkey", staticSettings.getAndroidKey(),};
+                                connect.setRequest(request_new);
+                                //   connect.work();
+                                //   while(connect.getStateRequest() == 2){}
+                                connect.toWork();
+                                data_from_server = connect.getResponse();
+
+                                trigger = false;
+                                // send body ---------------------------------------------------------------
+                                //    Log.d(staticSettings.getLogTag(), "дернули метод буфера, шлем на сервак и получаем ответ=" + data_from_server);
 // end send body -----------------------------------------------------------
-                        } else {
-                            // flag 3 - reseive clip data form server
-                            String[] request_read = {
-                                    "flag",  "4",
-                                    "cookie",  user_key_fromdevice,
-                                    "md5data",  toMd5(clipRead()),
-                                    "androidkey",  staticSettings.getAndroidKey(),};
-                            connect.setRequest(request_read);
-                            connect.work();
-                       //     Log.d(staticSettings.getLogTag(), "flag=4" + "|" + "md5clip=" + toMd5(clipRead()) + "|" + "clipread=" + clipRead());
-                            trigger = false;
+                            } else {
+                                // flag 3 - reseive clip data form server
+                                String[] request_read = {
+                                        "flag", "4",
+                                        "cookie", user_key_fromdevice,
+                                        "md5data", toMd5(clipRead()),
+                                        "androidkey", staticSettings.getAndroidKey(),};
+                                connect.setRequest(request_read);
+                                //  connect.work();
+                                connect.toWork();
+                                //     Log.d(staticSettings.getLogTag(), "flag=4" + "|" + "md5clip=" + toMd5(clipRead()) + "|" + "clipread=" + clipRead());
                             /*
 
                         /* connect.getStateRequest() param result
@@ -125,33 +151,41 @@ public class ServiceInterCloud_old extends Service {
                             0 error connect
                             1 successfully
                          */
-                            while(connect.getStateRequest() == 2){}
-                            data_from_server = null;
-                            data_from_server = connect.getResponse(); // string from server
-                            // тут решаем пришли другие данные или теже, чтобы не писать лишний раз в буфер обмена
-                            data_from_server_md5 = toMd5(data_from_server);
-                            data_clipboard_md5 = toMd5(data_clipboard_to_send);
-                            data_clipboard_first_start_md5 = toMd5(data_clipboard_first_start); // после рестарта сервиса сравниваем то что сейчас в бефере с тем что пришло и решаем показывать ли уведомление
-                           // Log.d(TAG, "STATE=" + Boolean.toString(data_from_server_md5.equals(data_clipboard_first_start_md5)));
-                           // Log.d(TAG, "md5=" + data_from_server_md5 + "|" + data_clipboard_first_start_md5);
+                                while (connect.getStateRequest() == 2) {
+                                }
+                                data_from_server = null;
+                                data_from_server = connect.getResponse(); // string from server
+                                // тут решаем пришли другие данные или теже, чтобы не писать лишний раз в буфер обмена
+                                data_from_server_md5 = toMd5(data_from_server);
+                                data_clipboard_md5 = toMd5(data_clipboard_now);
+                                data_clipboard_first_start_md5 = toMd5(data_clipboard_first_start); // после рестарта сервиса сравниваем то что сейчас в бефере с тем что пришло и решаем показывать ли уведомление
+                                // Log.d(TAG, "STATE=" + Boolean.toString(data_from_server_md5.equals(data_clipboard_first_start_md5)));
+                                // Log.d(TAG, "md5=" + data_from_server_md5 + "|" + data_clipboard_first_start_md5);
 
-                            if (!data_from_server_md5.equals(data_clipboard_md5) & !data_from_server_md5.equals(data_clipboard_first_start_md5) & !data_from_server_md5.equals(toMd5(clipRead())) & !data_from_server.equals("")){
-                                data_clipboard_ondevice = data_from_server;
-                                if (data_from_server.equals("errrd")){Log.d(staticSettings.getLogTag(), "error read from server=" + data_from_server);}
-                                else if (data_from_server.equals("==")){Log.d(staticSettings.getLogTag(), "md5 sum is equal, there is nothing to writing");}
-                                else {
-                                    clipWrite(data_from_server);
-                                    SharedPreferences sPref = getSharedPreferences("TAG", MODE_PRIVATE);
-                                    Log.d(staticSettings.getLogTag(), "switch=" + sPref.getBoolean(APP_PREFERENCES_SWITCH_NOTIFICATION, true));
-                                    if (sPref.getBoolean(APP_PREFERENCES_SWITCH_NOTIFICATION, true)) {
-                                        sendNotification(data_from_server);
-                                        Log.d(staticSettings.getLogTag(), "NOTIFICATION=" + data_from_server);
-                                    //    Log.d(staticSettings.getLogTag(), "notification=" + sPref.getBoolean(APP_PREFERENCES_SWITCH_NOTIFICATION, true));
+                                if (!data_from_server_md5.equals(data_clipboard_md5) & !data_from_server_md5.equals(data_clipboard_first_start_md5) & !data_from_server_md5.equals(toMd5(clipRead())) & !data_from_server.equals("")) {
+                                    data_clipboard_ondevice = data_from_server;
+                                    if (data_from_server.equals("errrd")) {
+                                        Log.d(staticSettings.getLogTag(), "error read from server=" + data_from_server);
+                                    } else if (data_from_server.equals("==")) {
+                                        Log.d(staticSettings.getLogTag(), "md5 sum is equal, there is nothing to writing");
+                                    } else {
+                                        trigger_send_receive_notification = 1;
+                                        clipWrite(data_from_server);
+                                        Log.d(staticSettings.getLogTag(), "switch=" + sPref.getBoolean(APP_PREFERENCES_SWITCH_NOTIFICATION, true));
+                                        if (sPref.getBoolean(APP_PREFERENCES_SWITCH_NOTIFICATION, true)) {
+                                            basedNotification(data_from_server);
+                                            Log.d(staticSettings.getLogTag(), "NOTIFICATION=" + data_from_server);
+                                            //    Log.d(staticSettings.getLogTag(), "notification=" + sPref.getBoolean(APP_PREFERENCES_SWITCH_NOTIFICATION, true));
+                                        }
                                     }
                                 }
-                            }
-                           // Log.d(staticSettings.getLogTag(), "Response from server=" + data_from_server);
+                                // Log.d(staticSettings.getLogTag(), "Response from server=" + data_from_server);
 // end send body -----------------------------------------------------------
+                            }
+                        }
+                        else {
+                            TimeUnit.SECONDS.sleep(staticSettings.getTimePerUpdateData());
+                            Log.d(staticSettings.getLogTag(), "Screen Off, no sync");
                         }
                     } catch (Exception e) {
                      //   Log.d(staticSettings.getLogTag(), "error_connection_service=" + e);
@@ -185,18 +219,33 @@ public class ServiceInterCloud_old extends Service {
         Log.d(staticSettings.getLogTag(), "serviceEND");
     }
     //----------------------- WORKING CLIPBOARD ---------------------------------------------------
-    //р дергается когда в буфер что-то копируют в т.ч. метод записи
+    //этот метод дергается когда в буфер что-то копируют в т.ч. метод записи
     private void listenerClipCopy() {
+        SharedPreferences sPref = getSharedPreferences("TAG", MODE_PRIVATE);
         Context context = getApplicationContext();
+   ///     ConnectLogic connect_for_send = new ConnectLogic();
+   //     connect_for_send.setScriptName("cloudapi.php");
         ClipboardManager cb = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
         if (cb.hasPrimaryClip()) {
             ClipData cd = cb.getPrimaryClip();
             if (cd.getDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
                 try {
-                    trigger = true;
-                    data_clipboard_to_send = cd.getItemAt(0).getText().toString();
-                    db = new HelperFragmentHistoryDBWorked(context);
-                    db.writeDataBase(data_clipboard_to_send);
+                    /**
+                     * Тут мы смотрим включена ли опция запрос перед синхронизацией данных, если да, то просто показываем диалог
+                     * решение о синхронизации запрашивается в пуш уведомлении
+                     */
+                    data_clipboard_now = cd.getItemAt(0).getText().toString();
+                    if (sPref.getBoolean(APP_PREFERENCES_DIALOG_BEFORE_SYNC, false)){
+                        // тут будет логика работы отказа от синхронизации или синхронизации
+                        notificationBeforeSync(data_clipboard_now);// шлем данные скопированные
+                        // в буфер обмена
+                    //    noto2();
+                    }
+                    else Log.d(staticSettings.getLogTag(), "dialog disable"); {
+                        trigger = true;
+                        db = new HelperFragmentHistoryDBWorked(context);
+                        db.writeDataBase(data_clipboard_now);
+                    }
                 //    Log.d(TAG, "что то записали в буфер");
                     //Log.d(TAG, "send_new_local_clip=" + cd.getItemAt(0).getText().toString());
                 }
@@ -222,16 +271,6 @@ public class ServiceInterCloud_old extends Service {
     }
     // generate MD5 hash
     private String toMd5(String input) {
-     /*   String result = "";
-        try {
-            MessageDigest m = MessageDigest.getInstance("MD5");
-            m.update(input.getBytes(), 0, input.length());
-            result = new BigInteger(1, m.digest()).toString(16);
-        }catch (NoSuchAlgorithmException z){
-           // Log.d(TAG, z.toString());
-            result = "error";
-        }
-        return result;*/
         MessageDigest m = null;
         try {
             m = MessageDigest.getInstance("MD5");
@@ -263,7 +302,7 @@ public class ServiceInterCloud_old extends Service {
         ed.putString(userkey, userKeyIn);
         ed.commit();
     }
-    private void sendNotification(String clip_new){
+    private void basedNotification(String clip_new){
         Context context = getApplicationContext();
         if (clip_new.length() > 36){notification_data_to_present = clip_new.substring(0, 36);}
         else {notification_data_to_present = clip_new;}
@@ -310,4 +349,98 @@ public class ServiceInterCloud_old extends Service {
             notificationManager.notify(NOTIFY_ID, notification);
         }
     }
+    public void notificationBeforeSync(String my_clip_now) {
+        String my_content = "";
+        int id = (int) System.currentTimeMillis();
+        // crop string before display
+        if (my_clip_now.length() > 150){my_content = my_clip_now.substring(0, 150);}
+        else {my_content = my_clip_now;}
+        RemoteViews remoteViews = new RemoteViews(getPackageName(),
+                R.layout.notification_before_sync);
+
+        Notification noti = new Notification();
+        noti = setBigTextStyleNotification();
+        noti.defaults |= Notification.DEFAULT_LIGHTS;
+        noti.defaults |= Notification.DEFAULT_VIBRATE;
+        noti.defaults |= Notification.DEFAULT_SOUND;
+        noti.flags |= Notification.FLAG_ONLY_ALERT_ONCE;
+        mNotificationManager.notify(0, noti);
+    }
+    public void noto2() // paste in activity
+    {
+        Notification.Builder notif;
+        NotificationManager nm;
+        notif = new Notification.Builder(getApplicationContext());
+        notif.setSmallIcon(R.drawable.ic_notification);
+        notif.setContentTitle("");
+        Uri path = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        notif.setSound(path);
+        nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+        Intent yesReceive = new Intent();
+        yesReceive.setAction(StaticSettings.YES_ACTION);
+        PendingIntent pendingIntentYes = PendingIntent.getBroadcast(this, 12345, yesReceive, PendingIntent.FLAG_UPDATE_CURRENT);
+        notif.addAction(R.drawable.ic_notification, "Yes", pendingIntentYes);
+
+
+        Intent yesReceive2 = new Intent();
+        yesReceive2.setAction(StaticSettings.STOP_ACTION);
+        PendingIntent pendingIntentYes2 = PendingIntent.getBroadcast(this, 12345, yesReceive2, PendingIntent.FLAG_UPDATE_CURRENT);
+        notif.addAction(R.drawable.ic_notification, "No", pendingIntentYes2);
+        nm.notify(10, notif.getNotification());
+    }
+
+
+    private Notification setBigTextStyleNotification() {
+        Bitmap remote_picture = null;
+
+        // Create the style object with BigTextStyle subclass.
+        NotificationCompat.BigTextStyle notiStyle = new NotificationCompat.BigTextStyle();
+        notiStyle.setBigContentTitle("Big Text Expanded");
+        notiStyle.setSummaryText("Nice big text.");
+
+        try {
+            remote_picture = BitmapFactory.decodeStream((InputStream) new URL("").getContent());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Add the big text to the style.
+        CharSequence bigText = "This is an example of a large string to demo how much " +
+                "text you can show in a 'Big Text Style' notification.";
+        notiStyle.bigText(bigText);
+
+        // Creates an explicit intent for an ResultActivity to receive.
+        Intent resultIntent = new Intent(this, MyNotificationBeforeSync.class);
+
+        // This ensures that the back button follows the recommended convention for the back key.
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+
+        // Adds the back stack for the Intent (but not the Intent itself).
+        stackBuilder.addParentStack(MyNotificationBeforeSync.class);
+
+        // Adds the Intent that starts the Activity to the top of the stack.
+        stackBuilder.addNextIntent(resultIntent);
+        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        return new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.ic_notification)
+                .setAutoCancel(true)
+                .setLargeIcon(remote_picture)
+                .setContentIntent(resultPendingIntent)
+                .addAction(R.drawable.ic_search, "One", resultPendingIntent)
+                .addAction(R.drawable.ic_search, "Two", resultPendingIntent)
+                .addAction(R.drawable.ic_search, "Three", resultPendingIntent)
+                .setContentTitle("Big Text Normal")
+                .setContentText("This is an example of a Big Text Style.")
+                .setStyle(notiStyle).build();
+    }
+
+
+ /*   public class NotificationBeforeSyncSkip extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d(staticSettings.getLogTag(),"Received Skip Event");
+        }
+    } */
 }

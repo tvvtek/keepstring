@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion '25.0.0'
+    buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "com.tvvtek.keepstring"
         minSdkVersion 16
@@ -29,4 +29,8 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.squareup.okhttp3:okhttp:3.6.0'
     compile 'com.google.code.gson:gson:2.7'
+    compile 'com.google.firebase:firebase-messaging:11.8.0'
+    compile 'com.firebase:firebase-jobdispatcher:0.6.0'
 }
+
+apply plugin: 'com.google.gms.google-services'

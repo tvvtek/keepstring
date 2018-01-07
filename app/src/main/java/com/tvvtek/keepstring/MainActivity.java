@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.google.firebase.FirebaseApp;
 import com.tvvtek.interfaces.InterfaceOnBackPressedListener;
 
 import java.io.BufferedReader;
@@ -48,6 +49,9 @@ public class MainActivity extends AppCompatActivity
             overridePendingTransition(R.anim.slide_transform,R.anim.alpha);
         }
         setContentView(R.layout.activity_main);
+     //   FirebaseApp.initializeApp(this)''
+        MyFirebaseInstanceIDService getToken = new MyFirebaseInstanceIDService();
+        getToken.onTokenRefresh();
     //    setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
