@@ -24,6 +24,8 @@ import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.tvvtek.connectpackage.ConnectLogic;
+import com.tvvtek.helpers.HelperFragmentHistoryDBWorked;
+import com.tvvtek.ui.FragmentEnter;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,7 +35,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.TimeUnit;
 
-public class ServiceInterCloudFirebaseInclude extends Service {
+public class ServiceInterCloud extends Service {
     StaticSettings staticSettings;
     HelperFragmentHistoryDBWorked db;
 
@@ -66,7 +68,7 @@ public class ServiceInterCloudFirebaseInclude extends Service {
         }
 
     };
-    public ServiceInterCloudFirebaseInclude() {
+    public ServiceInterCloud() {
     }
     @Override
     public void onCreate() {
@@ -134,7 +136,7 @@ public class ServiceInterCloudFirebaseInclude extends Service {
                                 //    Log.d(staticSettings.getLogTag(), "дернули метод буфера, шлем на сервак и получаем ответ=" + data_from_server);
 // end send body -----------------------------------------------------------
                             } else {
-                                // flag 3 - reseive clip data form server
+                                // flag 4 - receive clip data form server
                                 String[] request_read = {
                                         "flag", "4",
                                         "cookie", user_key_fromdevice,
@@ -194,6 +196,7 @@ public class ServiceInterCloudFirebaseInclude extends Service {
             }
         });
         SharedPreferences sPref = getSharedPreferences("TAG", MODE_PRIVATE);
+        // chech witch enable synch before start sync
         if (count_thread == 1 & sPref.getBoolean(APP_PREFERENCES_SWITCH_SYNC, true))  thread_cloud.start();
         return super.onStartCommand(intent, flags, startId);
     }

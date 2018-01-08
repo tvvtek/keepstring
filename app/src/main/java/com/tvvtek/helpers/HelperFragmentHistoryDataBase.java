@@ -1,10 +1,12 @@
-package com.tvvtek.keepstring;
+package com.tvvtek.helpers;
 
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+
+import com.tvvtek.keepstring.StaticSettings;
 
 public class HelperFragmentHistoryDataBase extends SQLiteOpenHelper {
 

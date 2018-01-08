@@ -1,4 +1,4 @@
-package com.tvvtek.keepstring;
+package com.tvvtek.helpers;
 
 
 import android.content.res.Configuration;
@@ -11,6 +11,9 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.ImageView;
+
+import com.tvvtek.keepstring.R;
+import com.tvvtek.ui.FragmentHelpForSlider;
 
 public class HelpSliderActivity extends FragmentActivity {
 

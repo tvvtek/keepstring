@@ -1,4 +1,4 @@
-package com.tvvtek.keepstring;
+package com.tvvtek.Receivers;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -6,6 +6,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.tvvtek.keepstring.R;
+import com.tvvtek.keepstring.ServiceInterCloud;
+import com.tvvtek.keepstring.StaticSettings;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -23,7 +27,7 @@ public class MyReceiverAutoStart extends BroadcastReceiver {
         SharedPreferences sPref = ctx.getSharedPreferences("TAG", MODE_PRIVATE);
         if (sPref.getBoolean(APP_PREFERENCES_SWITCH_AUTOSTART, true)){
             try {
-                context.startService(new Intent(context, ServiceInterCloudFirebaseInclude.class)
+                context.startService(new Intent(context, ServiceInterCloud.class)
                         .putExtra("mode_state_io", true)
                         .putExtra("userkey", loadKeyFromDevice(context))
                         .putExtra("data in clipboard", ""));

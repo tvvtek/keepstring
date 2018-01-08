@@ -1,4 +1,4 @@
-package com.tvvtek.keepstring;
+package com.tvvtek.ui;
 
 
 import android.app.Dialog;
@@ -16,6 +16,10 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.tvvtek.keepstring.R;
+import com.tvvtek.keepstring.ServiceInterCloud;
+import com.tvvtek.keepstring.StaticSettings;
 
 public class FragmentDialog extends DialogFragment {
     StaticSettings staticSettings;
@@ -103,7 +107,7 @@ public class FragmentDialog extends DialogFragment {
 
     private void clipWrite(String text_for_write_clip){
         try{
-            ServiceInterCloudFirebaseInclude.trigger = true;
+            ServiceInterCloud.trigger = true;
             android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getContext().getSystemService(getContext().CLIPBOARD_SERVICE);
             android.content.ClipData clip = android.content.ClipData.newPlainText("clip", text_for_write_clip);
             clipboard.setPrimaryClip(clip);}

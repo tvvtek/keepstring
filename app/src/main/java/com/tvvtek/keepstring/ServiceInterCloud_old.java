@@ -24,6 +24,8 @@ import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.tvvtek.connectpackage.ConnectLogic;
+import com.tvvtek.helpers.HelperFragmentHistoryDBWorked;
+import com.tvvtek.ui.FragmentEnter;
 
 import java.io.IOException;
 import java.io.InputStream;

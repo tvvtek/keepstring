@@ -13,8 +13,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-import com.google.firebase.FirebaseApp;
+import com.tvvtek.firebase.MyFirebaseInstanceIDService;
+import com.tvvtek.helpers.HelpSliderActivity;
 import com.tvvtek.interfaces.InterfaceOnBackPressedListener;
+import com.tvvtek.ui.FragmentEnter;
+import com.tvvtek.ui.FragmentExit;
+import com.tvvtek.ui.FragmentHistory;
+import com.tvvtek.ui.FragmentManualMode;
+import com.tvvtek.ui.FragmentPinAccess;
+import com.tvvtek.ui.FragmentShareApp;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -49,7 +56,10 @@ public class MainActivity extends AppCompatActivity
             overridePendingTransition(R.anim.slide_transform,R.anim.alpha);
         }
         setContentView(R.layout.activity_main);
-     //   FirebaseApp.initializeApp(this)''
+
+        /**
+         * Make firebase obj and make unique token and
+         */
         MyFirebaseInstanceIDService getToken = new MyFirebaseInstanceIDService();
         getToken.onTokenRefresh();
     //    setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);

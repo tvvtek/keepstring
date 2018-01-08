@@ -19,7 +19,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".SplashScreen"
+            android:name="com.tvvtek.ui.SplashScreen"
             android:theme="@style/Theme.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,7 +27,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".HelpSliderActivity"
+            android:name="com.tvvtek.helpers.HelpSliderActivity"
             android:label="@string/app_name"
             android:theme="@style/Base.V7.Theme.AppCompat">
             android:windowSoftInputMode="stateHidden"
@@ -40,33 +40,33 @@
             android:windowSoftInputMode="stateHidden"></activity>
 
         <service
-            android:name=".ServiceInterCloudFirebaseInclude"
+            android:name=".ServiceInterCloud"
             android:enabled="true"
             android:exported="false" />
 
         <service
-            android:name=".MyFirebaseMessagingService">
+            android:name="com.tvvtek.firebase.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
 
         <service
-            android:name=".MyFirebaseInstanceIDService">
+            android:name="com.tvvtek.firebase.MyFirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>
         </service>
 
         <receiver
-            android:name=".MyReceiverAutoStart" >
+            android:name="com.tvvtek.Receivers.MyReceiverAutoStart" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
                 <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".MyReceiverNotification">
+        <receiver android:name="com.tvvtek.Receivers.MyReceiverNotification">
             <intent-filter>
                 <action android:name="YES_ACTION"/>
                 <action android:name="STOP_ACTION"/>

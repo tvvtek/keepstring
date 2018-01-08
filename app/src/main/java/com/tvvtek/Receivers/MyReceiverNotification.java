@@ -1,9 +1,11 @@
-package com.tvvtek.keepstring;
+package com.tvvtek.Receivers;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
+
+import com.tvvtek.keepstring.StaticSettings;
 
 public class MyReceiverNotification extends BroadcastReceiver {
     @Override

@@ -1,4 +1,4 @@
-package com.tvvtek.keepstring;
+package com.tvvtek.ui;
 
 
 import android.os.Bundle;
@@ -16,6 +16,8 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.tvvtek.connectpackage.ConnectLogic_old;
+import com.tvvtek.keepstring.R;
+import com.tvvtek.keepstring.StaticSettings;
 
 public class FragmentPinAccess extends Fragment {
     StaticSettings staticSettings;

@@ -1,4 +1,4 @@
-package com.tvvtek.keepstring;
+package com.tvvtek.ui;
 
 import android.app.Activity;
 import android.content.Context;
@@ -23,6 +23,8 @@ import android.widget.Toast;
 
 import com.tvvtek.connectpackage.ConnectLogic_old;
 import com.tvvtek.interfaces.InterfaceOnBackPressedListener;
+import com.tvvtek.keepstring.R;
+import com.tvvtek.keepstring.StaticSettings;
 
 public class FragmentRegister extends Fragment implements InterfaceOnBackPressedListener {
    // private static final String TAG = "KeepString";

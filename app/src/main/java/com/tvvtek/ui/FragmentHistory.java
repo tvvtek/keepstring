@@ -1,4 +1,4 @@
-package com.tvvtek.keepstring;
+package com.tvvtek.ui;
 
 import android.app.Activity;
 import android.content.Context;
@@ -23,6 +23,12 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.tvvtek.helpers.HelperFragmentHistoryDBWorked;
+import com.tvvtek.helpers.HelperFragmentHistoryLocalItemList;
+import com.tvvtek.keepstring.R;
+import com.tvvtek.keepstring.ServiceInterCloud;
+import com.tvvtek.keepstring.StaticSettings;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -147,7 +153,7 @@ public class FragmentHistory extends Fragment {
 
     private void clipWrite(String text_for_write_clip){
         try{
-            ServiceInterCloudFirebaseInclude.trigger = true;
+            ServiceInterCloud.trigger = true;
             android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getContext().getSystemService(getContext().CLIPBOARD_SERVICE);
             android.content.ClipData clip = android.content.ClipData.newPlainText("clip", text_for_write_clip);
             clipboard.setPrimaryClip(clip);}

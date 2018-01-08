@@ -1,4 +1,4 @@
-package com.tvvtek.keepstring;
+package com.tvvtek.helpers;
 
 
 import android.content.ContentValues;
@@ -9,6 +9,7 @@ import android.os.Build;
 import android.util.Log;
 
 import com.tvvtek.interfaces.InterfaceForIODataBase;
+import com.tvvtek.keepstring.StaticSettings;
 
 import java.util.ArrayList;
 import java.util.Calendar;

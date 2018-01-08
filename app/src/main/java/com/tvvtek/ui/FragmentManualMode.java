@@ -1,4 +1,4 @@
-package com.tvvtek.keepstring;
+package com.tvvtek.ui;
 
 
 import android.app.Activity;
@@ -17,6 +17,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.tvvtek.keepstring.R;
+import com.tvvtek.keepstring.ServiceInterCloud;
+import com.tvvtek.keepstring.StaticSettings;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -95,7 +99,7 @@ public class FragmentManualMode extends Fragment {
 
     private void clipWrite(String textforwriteclip){
         try{
-            ServiceInterCloudFirebaseInclude.trigger = true;
+            ServiceInterCloud.trigger = true;
         android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getContext().getSystemService(getContext().CLIPBOARD_SERVICE);
         android.content.ClipData clip = android.content.ClipData.newPlainText("clip", textforwriteclip);
         clipboard.setPrimaryClip(clip);}

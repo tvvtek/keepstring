@@ -1,4 +1,4 @@
-package com.tvvtek.keepstring;
+package com.tvvtek.ui;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -8,6 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import com.tvvtek.keepstring.R;
+import com.tvvtek.keepstring.StaticSettings;
 
 public class FragmentHelpForSlider extends Fragment {
     private Integer num_page = 0;

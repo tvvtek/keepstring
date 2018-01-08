@@ -1,7 +1,6 @@
-package com.tvvtek.keepstring;
+package com.tvvtek.ui;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -18,15 +17,30 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NotificationManagerCompat;
+import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.tvvtek.connectpackage.ConnectLogic_old;
+import com.tvvtek.helpers.HelperFragmentHistoryDBWorked;
+import com.tvvtek.keepstring.MainActivity;
+import com.tvvtek.keepstring.R;
+import com.tvvtek.keepstring.ServiceInterCloud;
+import com.tvvtek.keepstring.StaticSettings;
 
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
@@ -35,7 +49,7 @@ import java.io.OutputStreamWriter;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class FragmentMain extends Fragment {
+public class FragmentEnter extends Fragment {
     SharedPreferences sPref;
     HelperFragmentHistoryDBWorked db;
     public final String APP_PREFERENCES_SWITCH_SYNC = "switch_sycn";
@@ -46,17 +60,22 @@ public class FragmentMain extends Fragment {
     private BroadcastReceiver broadcastReceiver;
 
 
+    ProgressBar progressBarEnter;
+    EditText enterLogin, enterPass;
     TextView enter_help_text, info_login, info_clipboardnow, clipboardnow, register_text, forgotpass;
     Button btnEnter, btnExit, btnRe_read, btnCleanHistory;
-    Switch switchAutoUpdate, switchNotification, switchAutoStart, switchSleepSync;
-    Handler handler_auto_reread_clip;
+    Switch switchAutoUpdate, switchNotification, switchAutoStart, switchSleepSync, switchDialogBeforeSync;
+    Handler handler_enter, handler_auto_reread_clip;
     StaticSettings staticSettings;
+    private volatile String result = "";
     private static final int NOTIFY_ID = 100;
     private boolean state_thread_reread_clip = true;
 
+    private static String login = "null"; // for save login name
     private static String userkey = "userkey";
     private static String userlogin = "userlogin";
     private int position_space;
+    private boolean state_switch_pass = false;
     private FragmentActivity myContext;
 
     @Override
@@ -72,14 +91,190 @@ public class FragmentMain extends Fragment {
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        Activity activity = context instanceof Activity ? (Activity) context : null;
-        myContext=(FragmentActivity) activity;
-    }
+     public void onAttach(Context context) {
+            super.onAttach(context);
+            Activity activity = context instanceof Activity ? (Activity) context : null;
+            myContext=(FragmentActivity) activity;
+        }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return createViewAuthOk(inflater, container, savedInstanceState);
+       // Log.d(TAG, "PREFER=" + loadCookie());
+        if (loadCookie().length() == 128){
+            return createViewAuthOk(inflater, container, savedInstanceState);
+          //  Log.d(TAG, "coki" + loadCookie());
+        }
+        else {
+            return createViewEnter(inflater, container, savedInstanceState);
+        }
+    }
+
+    private View createViewEnter(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+        View myView = inflater.inflate(R.layout.fragment_enter, container, false);
+        setRetainInstance(true);
+        btnExit = (Button)myView.findViewById(R.id.btnExit);
+   //     switchAutoUpdate = (Switch) myView.findViewById(R.id.switchAutoUpdateData);
+        enter_help_text = (TextView)myView.findViewById(R.id.enter_help_text);
+        progressBarEnter = (ProgressBar)myView.findViewById(R.id.progressBarEnter);
+        enterLogin = (EditText)myView.findViewById(R.id.settings_enter_login);
+        enterPass = (EditText)myView.findViewById(R.id.settings_enter_pass);
+        btnEnter = (Button)myView.findViewById(R.id.btn_enter);
+        register_text = (TextView)myView.findViewById(R.id.register_text);
+        forgotpass = (TextView)myView.findViewById(R.id.forgot_pass);
+
+        progressBarEnter.setVisibility(View.INVISIBLE);
+        enterPass.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                final int DRAWABLE_RIGHT = 2;
+                if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                    if(event.getRawX() >= (enterPass.getRight() - enterPass.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        if (!state_switch_pass) {
+                            enterPass.setInputType(InputType.TYPE_CLASS_TEXT);
+                            state_switch_pass = true;
+                            enterPass.setNextFocusUpId(enterPass.getNextFocusUpId());
+                        }
+                        else {
+                            enterPass.setInputType(129);
+                            state_switch_pass = false;
+                        }
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+        register_text.setOnClickListener(new View.OnClickListener(){public void onClick(View myView) {
+            Fragment fragment;
+            Class fragmentClass;
+            FragmentManager fragManager = myContext.getSupportFragmentManager();
+            fragmentClass = FragmentRegister.class;
+            try {
+                fragment = (Fragment) fragmentClass.newInstance();
+                fragManager.beginTransaction().replace(R.id.container, fragment).commit();
+            }catch (Exception h){
+            }
+        }});
+        forgotpass.setOnClickListener(new View.OnClickListener(){public void onClick(View myView) {
+            Uri address = Uri.parse("https://keepstring.com/forgothtml.php");
+            Intent openlinkIntent = new Intent(Intent.ACTION_VIEW, address);
+            startActivity(openlinkIntent);
+        }});
+
+        // Refresh IU
+        handler_enter = new Handler()
+        {
+            public void handleMessage(Message msg) throws NullPointerException
+            {
+                // update TextView
+                Bundle bundle = msg.getData();
+                String data_from_thread_io_enter;
+                data_from_thread_io_enter = bundle.getString("1");
+                // for enter
+                if (data_from_thread_io_enter.equals("0")) // error enter, login or pass not valid
+                {
+                    btnEnter.setEnabled(true);
+                    progressBarEnter.setVisibility(View.INVISIBLE);
+                    try {
+                        Toast toast = Toast.makeText(getContext(), R.string.error_enter, Toast.LENGTH_SHORT);
+                        toast.show();
+                    }catch (NullPointerException error){
+                        error.printStackTrace();
+                    }
+                }
+                else if (data_from_thread_io_enter.length() == 128) // enter is OK, added cookie into file staticSettings and hide button and input
+                {
+                    writeCookieOnFile(data_from_thread_io_enter);
+                    saveCookie(data_from_thread_io_enter, login); // write userkey into preferences
+                    restartFirstActivity();
+                    progressBarEnter.setVisibility(View.INVISIBLE);
+                }
+                else if (data_from_thread_io_enter.equals("error_connect"))
+                {
+                    btnEnter.setEnabled(true);
+                    progressBarEnter.setVisibility(View.INVISIBLE);
+                    try{
+                    Toast toast = Toast.makeText(getContext(), R.string.error_connect, Toast.LENGTH_LONG);
+                    toast.show();
+                    }catch (NullPointerException error){
+                        error.printStackTrace();
+                    }
+                }
+                else
+                {
+                    btnEnter.setEnabled(true);
+                    progressBarEnter.setVisibility(View.INVISIBLE);
+                    try{
+                    Toast toast = Toast.makeText(getContext(), R.string.error_invalid_responce, Toast.LENGTH_LONG);
+                    toast.show();
+                    }catch (NullPointerException error){
+                        error.printStackTrace();
+                    }
+                }
+            };
+        };
+
+// -------------------------------------------------------------------------------------------------
+        btnEnter.setOnClickListener(new View.OnClickListener(){public void onClick(View myView) {
+            if (    enterLogin.length() > staticSettings.getMinLoginPass()
+                    && enterLogin.length() < staticSettings.getMaxLoginPass())
+            {
+                login = enterLogin.getText().toString();
+                btnEnter.setEnabled(false);
+                // Thread per operations
+                progressBarEnter.setVisibility(View.VISIBLE);
+                Thread thread_enter = new Thread(new Runnable() {
+
+                    public void run() {
+                        Message message = handler_enter.obtainMessage();
+                        Bundle bundle = new Bundle();
+                        ConnectLogic_old connect = new ConnectLogic_old(); // For server connect and send data
+                        connect.setScriptName("cloudapi.php");
+                        //   connect.setScriptName("print.php"); // this variant for testing setRequest POST data
+                        String[] request_register = {"flag", "0",
+                                "login", login,
+                                "password", enterPass.getText().toString(),
+                                "androidkey", staticSettings.getAndroidKey()};
+                        connect.setRequest(request_register);
+                        connect.work();
+                         /* connect.getStateRequest() param result
+                            -1 timeout
+                            0 error connect
+                            1 successfully
+                         */
+
+                        while (connect.getStateRequest() == 2) {}
+
+                        if (connect.getStateRequest() == 1) {
+                            try {
+                                result = connect.getResponse();
+                                Log.d(staticSettings.getLogTag(), "POST=" + result);
+                                //  result_trigger = 1;
+                            } catch (Exception e) {
+                                //   result_trigger = 0;
+                                Log.d(staticSettings.getLogTag(), "ErrorGetDataFromConnectObj= " + e);
+                            }
+                        }
+                        else if (connect.getStateRequest() == 0) {
+                            result = "error_connect";
+                        }
+                        bundle.putString("1", result); // var result for cookie
+                      //  Log.d(TAG, "KEY_" + result);
+                        message.setData(bundle);
+                        handler_enter.sendMessage(message);
+                        //   Log.d(TAG, "thread end2=" + result);
+                    }
+                });
+                thread_enter.start();
+            }
+            else
+            {
+                Toast toast = Toast.makeText(getContext(), R.string.error_login_pass, Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        }});
+// -------------------------------------------------------------------------------------------------
+        return myView;
     }
     private View createViewAuthOk(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         final View myViewAuthOk = inflater.inflate(R.layout.fragment_settings_auth, container, false);
@@ -94,14 +289,17 @@ public class FragmentMain extends Fragment {
         switchNotification = (Switch)myViewAuthOk.findViewById(R.id.switchNotification);
         switchAutoStart = (Switch)myViewAuthOk.findViewById(R.id.switchAutoStart);
         switchSleepSync = (Switch)myViewAuthOk.findViewById(R.id.switchSleepModeSync);
+    //    switchDialogBeforeSync = (Switch)myViewAuthOk.findViewById(R.id.switchDialogbeforeSync);
         Context context = getContext();
         // получаем данные для состояния переключателей
         sPref = PreferenceManager.getDefaultSharedPreferences(context);
         final SharedPreferences sPref = context.getSharedPreferences("TAG", MODE_PRIVATE);
-        switchAutoUpdate.setChecked(sPref.getBoolean(APP_PREFERENCES_SWITCH_SYNC, true));
+        switchAutoUpdate.setChecked(sPref.getBoolean(APP_PREFERENCES_SWITCH_SYNC, false)); // sync by default
         switchNotification.setChecked(sPref.getBoolean(APP_PREFERENCES_SWITCH_NOTIFICATION, true));
         switchAutoStart.setChecked(sPref.getBoolean(APP_PREFERENCES_SWITCH_AUTOSTART, true));
         switchSleepSync.setChecked(sPref.getBoolean(APP_PREFERENCES_SWITCH_SLEEP_SYNC,false));
+     /*   switchDialogBeforeSync.setChecked(sPref.getBoolean(APP_PREFERENCES_DIALOG_BEFORE_SYNC,
+                false)); */
 
         Intent notificationIntent = new Intent(context, MainActivity.class);
         PendingIntent contentIntent = PendingIntent.getActivity(context,
@@ -114,7 +312,7 @@ public class FragmentMain extends Fragment {
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         notificationManager.cancel(NOTIFY_ID);
         // Start service into data
-        context.startService(new Intent(context, ServiceInterCloudFirebaseInclude.class)
+        context.startService(new Intent(context, ServiceInterCloud.class)
                 .putExtra("mode_state_io", true)
                 .putExtra("userkey", loadCookie()));
         /**
@@ -135,7 +333,7 @@ public class FragmentMain extends Fragment {
         btnExit.setOnClickListener(new View.OnClickListener(){public void onClick(View myView) {
             saveCookie("", "");
             writeCookieOnFile("0");
-            getContext().stopService(new Intent(getContext(), ServiceInterCloudFirebaseInclude.class));
+            getContext().stopService(new Intent(getContext(), ServiceInterCloud.class));
             restartFirstActivity();
         }});
         btnRe_read.setOnClickListener(new View.OnClickListener(){public void onClick(View myView) {
@@ -166,24 +364,24 @@ public class FragmentMain extends Fragment {
         }});
         //------------------------------
         switchAutoUpdate.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            // listener switch auto update clipboard
+        // listener switch auto update clipboard
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                //     sPref = PreferenceManager.getDefaultSharedPreferences(getContext());
+           //     sPref = PreferenceManager.getDefaultSharedPreferences(getContext());
                 SharedPreferences.Editor editor = sPref.edit();
                 if (isChecked) {
                     editor.putBoolean(APP_PREFERENCES_SWITCH_SYNC, true);
                     editor.apply();
                     // Make PendingIntent for Task1
-                    getContext().stopService(new Intent(getContext(), ServiceInterCloudFirebaseInclude.class)); // стопарим и потом запускаем сервис
-                    getContext().startService(new Intent(getContext(), ServiceInterCloudFirebaseInclude.class)
+                    getContext().stopService(new Intent(getContext(), ServiceInterCloud.class)); // стопарим и потом запускаем сервис
+                    getContext().startService(new Intent(getContext(), ServiceInterCloud.class)
                             .putExtra("mode_state_io", true)
                             .putExtra("userkey", loadCookie())
                             .putExtra("data in clipboard", ""));
                 } else {
                     editor.putBoolean(APP_PREFERENCES_SWITCH_SYNC, false);
                     editor.apply();
-                    getContext().stopService(new Intent(getContext(), ServiceInterCloudFirebaseInclude.class));
+                    getContext().stopService(new Intent(getContext(), ServiceInterCloud.class));
                 }
             }
         });
@@ -191,7 +389,7 @@ public class FragmentMain extends Fragment {
             // listener switch auto update clipboard
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                //   sPref = PreferenceManager.getDefaultSharedPreferences(getContext());
+             //   sPref = PreferenceManager.getDefaultSharedPreferences(getContext());
                 SharedPreferences.Editor editor = sPref.edit();
                 if (isChecked) {
                     editor.putBoolean(APP_PREFERENCES_SWITCH_NOTIFICATION, true);
@@ -206,7 +404,7 @@ public class FragmentMain extends Fragment {
             // listener switch auto update clipboard
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                //    sPref = PreferenceManager.getDefaultSharedPreferences(getContext());
+            //    sPref = PreferenceManager.getDefaultSharedPreferences(getContext());
                 SharedPreferences.Editor editor = sPref.edit();
                 if (isChecked) {
                     editor.putBoolean(APP_PREFERENCES_SWITCH_AUTOSTART, true);
@@ -232,6 +430,20 @@ public class FragmentMain extends Fragment {
                 }
             }
         });
+    /*    switchDialogBeforeSync.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            // listener switch auto update clipboard
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SharedPreferences.Editor editor = sPref.edit();
+                if (isChecked) {
+                    editor.putBoolean(APP_PREFERENCES_DIALOG_BEFORE_SYNC, true);
+                    editor.apply();
+                } else {
+                    editor.putBoolean(APP_PREFERENCES_DIALOG_BEFORE_SYNC, false);
+                    editor.apply();
+                }
+            }
+        }); */
         info_login.setText(loadLoginWork());
         broadcastReceiver = new BroadcastReceiver() {
             // тут принимаем данные из сервиса
@@ -243,7 +455,7 @@ public class FragmentMain extends Fragment {
         context.registerReceiver(broadcastReceiver, intFilter);
         /**
          *  Thread for auto re-read clip
-         */
+          */
         Thread thread_auto_reread_clip = new Thread(new Runnable() {
             public void run() {
                 while(state_thread_reread_clip){
@@ -269,18 +481,18 @@ public class FragmentMain extends Fragment {
      */
     private void reReadClipboard() {
         try {
-            ClipboardManager cliboardManager = (ClipboardManager) getContext().getSystemService(getContext().CLIPBOARD_SERVICE);
-            ClipData clipnow = cliboardManager.getPrimaryClip();
-            if (clipnow.getDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
-                try {
-                    clipboardnow.setText(clipnow.getItemAt(0).getText().toString());
-                    clipboardnow.setFocusable(false);
-                    clipboardnow.setTextColor(getResources().getColor(R.color.colorInfoText));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        ClipboardManager cliboardManager = (ClipboardManager) getContext().getSystemService(getContext().CLIPBOARD_SERVICE);
+        ClipData clipnow = cliboardManager.getPrimaryClip();
+        if (clipnow.getDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
+            try {
+                clipboardnow.setText(clipnow.getItemAt(0).getText().toString());
+                clipboardnow.setFocusable(false);
+                clipboardnow.setTextColor(getResources().getColor(R.color.colorInfoText));
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        }catch (Exception error_read_clip){
+        }
+    }catch (Exception error_read_clip){
             error_read_clip.printStackTrace();
         }
     }

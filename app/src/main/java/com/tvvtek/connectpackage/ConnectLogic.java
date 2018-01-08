@@ -75,7 +75,7 @@ public class ConnectLogic implements ConnectLogicInterface {
                 } else {
                     data_from_server = response.body().string(); //
                     now_state_request_result = 1;
-                    //   Log.d(staticSettings.getLogTag(), "OK INET" + data_from_server);
+                       Log.d(staticSettings.getLogTag(), "OK INET" + data_from_server);
                 }
             } catch (Exception error_connect) {
                 now_state_request_result = 0;

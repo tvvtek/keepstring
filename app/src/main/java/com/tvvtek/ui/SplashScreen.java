@@ -1,10 +1,14 @@
-package com.tvvtek.keepstring;
+package com.tvvtek.ui;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+
+import com.tvvtek.keepstring.MainActivity;
+import com.tvvtek.keepstring.R;
+import com.tvvtek.keepstring.StaticSettings;
 
 public class SplashScreen extends Activity {
 

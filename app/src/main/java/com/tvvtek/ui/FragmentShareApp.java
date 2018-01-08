@@ -1,4 +1,4 @@
-package com.tvvtek.keepstring;
+package com.tvvtek.ui;
 
 
 import android.content.Intent;
@@ -7,6 +7,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.tvvtek.keepstring.R;
+import com.tvvtek.keepstring.StaticSettings;
 
 public class FragmentShareApp extends Fragment {
     StaticSettings staticSettings;

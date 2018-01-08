@@ -1,4 +1,4 @@
-package com.tvvtek.keepstring;
+package com.tvvtek.helpers;
 
 
 import android.app.Activity;
@@ -11,6 +11,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
+
+import com.tvvtek.keepstring.R;
+import com.tvvtek.keepstring.StaticSettings;
 
 import java.util.ArrayList;
 import java.util.List;
