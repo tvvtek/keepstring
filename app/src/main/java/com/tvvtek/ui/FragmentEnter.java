@@ -235,6 +235,9 @@ public class FragmentEnter extends Fragment {
                         MyFirebaseInstanceIDService getToken = new MyFirebaseInstanceIDService();
                         getToken.onTokenRefresh();
                         String token = getToken.getNewToken();
+                        SharedPreferences.Editor editor = sPref.edit();
+                        editor.putString(APP_PREFERENCES_SWITCH_SYNC, token); // write firebase token into Shared Preferences
+                        editor.apply();
                         /**
                          * Start enter logic
                          */
