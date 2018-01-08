@@ -61,6 +61,7 @@
     <string name="switch_auto_start">Enable autorun KeepString</string>
     <string name="switch_sleep_sync">Synchronize in sleep mode</string>
     <string name="switch_dialog_before_sync">Display dialog before synchronization</string>
+    <string name="switch_firebase">Easy / Forced</string>
 
     <!-- Toast -->
     <string name="error_input_pin_get">Pin code should be from 6 to 10 symbols.</string>

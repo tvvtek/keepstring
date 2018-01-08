@@ -48,13 +48,14 @@ public class FragmentMain extends Fragment {
     public final String APP_PREFERENCES_SWITCH_NOTIFICATION = "switch_notification";
     public final String APP_PREFERENCES_SWITCH_AUTOSTART = "switch_auto_start";
     public final String APP_PREFERENCES_SWITCH_SLEEP_SYNC = "switch_sleep_sync";
+    public final String APP_PREFERENCES_SWITCH_FIREBASE = "switch_firebase";
     public static final String BROADCAST_ACTION = "action_session_closed";
     private BroadcastReceiver broadcastReceiver;
 
 
     TextView enter_help_text, info_login, info_clipboardnow, clipboardnow, register_text, forgotpass;
     Button btnEnter, btnExit, btnRe_read, btnCleanHistory;
-    Switch switchAutoUpdate, switchNotification, switchAutoStart, switchSleepSync;
+    Switch switchAutoUpdate, switchNotification, switchAutoStart, switchSleepSync, switchFirebase;
     Handler handler_auto_reread_clip;
     StaticSettings staticSettings;
     private static final int NOTIFY_ID = 100;
@@ -88,7 +89,7 @@ public class FragmentMain extends Fragment {
         return createViewAuthOk(inflater, container, savedInstanceState);
     }
     private View createViewAuthOk(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
-        final View myViewAuthOk = inflater.inflate(R.layout.fragment_settings_auth, container, false);
+        final View myViewAuthOk = inflater.inflate(R.layout.fragment_work, container, false);
         btnExit = (Button)myViewAuthOk.findViewById(R.id.btnExit);
         btnRe_read = (Button)myViewAuthOk.findViewById(R.id.btnRe_readclipboard);
         btnCleanHistory = (Button)myViewAuthOk.findViewById(R.id.btnCleanDb);
@@ -100,6 +101,7 @@ public class FragmentMain extends Fragment {
         switchNotification = (Switch)myViewAuthOk.findViewById(R.id.switchNotification);
         switchAutoStart = (Switch)myViewAuthOk.findViewById(R.id.switchAutoStart);
         switchSleepSync = (Switch)myViewAuthOk.findViewById(R.id.switchSleepModeSync);
+        switchFirebase = (Switch)myViewAuthOk.findViewById(R.id.switchFirebase);
         Context context = getContext();
         // получаем данные для состояния переключателей
         sPref = PreferenceManager.getDefaultSharedPreferences(context);
@@ -108,6 +110,7 @@ public class FragmentMain extends Fragment {
         switchNotification.setChecked(sPref.getBoolean(APP_PREFERENCES_SWITCH_NOTIFICATION, true));
         switchAutoStart.setChecked(sPref.getBoolean(APP_PREFERENCES_SWITCH_AUTOSTART, true));
         switchSleepSync.setChecked(sPref.getBoolean(APP_PREFERENCES_SWITCH_SLEEP_SYNC,false));
+        switchFirebase.setChecked(sPref.getBoolean(APP_PREFERENCES_SWITCH_FIREBASE,false));
 
         Intent notificationIntent = new Intent(context, MainActivity.class);
         PendingIntent contentIntent = PendingIntent.getActivity(context,
@@ -171,6 +174,9 @@ public class FragmentMain extends Fragment {
             }
         }});
         //------------------------------
+        /**
+         * Переключатели типа синхронизации
+         */
         switchAutoUpdate.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             // listener switch auto update clipboard
             @Override
@@ -193,6 +199,26 @@ public class FragmentMain extends Fragment {
                 }
             }
         });
+        switchFirebase.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            // listener switch auto update clipboard
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                //    sPref = PreferenceManager.getDefaultSharedPreferences(getContext());
+                SharedPreferences.Editor editor = sPref.edit();
+                if (isChecked) {
+                    editor.putBoolean(APP_PREFERENCES_SWITCH_FIREBASE, true);
+                    editor.apply();
+                } else {
+                    editor.putBoolean(APP_PREFERENCES_SWITCH_FIREBASE, false);
+                    editor.apply();
+                }
+            }
+        });
+        /**
+         * Конец секции типа синхронизации
+         */
+
+
         switchNotification.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             // listener switch auto update clipboard
             @Override

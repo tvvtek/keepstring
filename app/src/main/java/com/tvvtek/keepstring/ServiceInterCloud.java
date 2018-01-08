@@ -12,7 +12,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
@@ -43,6 +42,7 @@ public class ServiceInterCloud extends Service {
     public final String APP_PREFERENCES_SWITCH_NOTIFICATION = "switch_notification";
     public final String APP_PREFERENCES_SWITCH_SLEEP_SYNC = "switch_sleep_sync";
     public final String APP_PREFERENCES_DIALOG_BEFORE_SYNC = "switch_dialog_before_sync";
+    public final String APP_PREFERENCES_SWITCH_FIREBASE = "switch_firebase";
     private String data_from_server = "";
     private String data_from_server_md5 = "";
     private volatile boolean state_thread = true;
@@ -78,6 +78,7 @@ public class ServiceInterCloud extends Service {
         super.onCreate();
     }
 
+
     public int onStartCommand(Intent intent, int flags, final int startId) {
         /**
          * count_thread it`s counter thread, this variable does not run clones flows, preventing overload of memory.
@@ -98,9 +99,19 @@ public class ServiceInterCloud extends Service {
             user_key_fromdevice = loadKeyFromDevice();
         }
         // setRequest to server inside new thread
+        Sync(); // start sync
+       // softSynch(); // start soft sync
+        return super.onStartCommand(intent, flags, startId);
+    }
+
+
+
+
+
+    public void Sync(){
         Thread thread_cloud = new Thread(new Runnable() {
             public void run() {
-             //   ConnectLogic connect = new ConnectLogic(); // For server connect and send data
+                //   ConnectLogic connect = new ConnectLogic(); // For server connect and send data
                 PowerManager pm = (PowerManager) getApplicationContext().getSystemService(Context.POWER_SERVICE);
                 ConnectLogic connect = new ConnectLogic();
                 while (state_thread) {
@@ -136,16 +147,20 @@ public class ServiceInterCloud extends Service {
                                 //    Log.d(staticSettings.getLogTag(), "дернули метод буфера, шлем на сервак и получаем ответ=" + data_from_server);
 // end send body -----------------------------------------------------------
                             } else {
-                                // flag 4 - receive clip data form server
-                                String[] request_read = {
-                                        "flag", "4",
-                                        "cookie", user_key_fromdevice,
-                                        "md5data", toMd5(clipRead()),
-                                        "androidkey", staticSettings.getAndroidKey(),};
-                                connect.setRequest(request_read);
-                                //  connect.work();
-                                connect.toWork();
-                                //     Log.d(staticSettings.getLogTag(), "flag=4" + "|" + "md5clip=" + toMd5(clipRead()) + "|" + "clipread=" + clipRead());
+                                /**
+                                 * Проверка типа синхронизации, либо мягкая, либо по команде из Firebase
+                                 */
+                                if (sPref.getBoolean(APP_PREFERENCES_SWITCH_SYNC, true) & sPref.getBoolean(APP_PREFERENCES_SWITCH_FIREBASE, true)) {
+                                    // flag 4 - receive clip data form server
+                                    String[] request_read = {
+                                            "flag", "4",
+                                            "cookie", user_key_fromdevice,
+                                            "md5data", toMd5(clipRead()),
+                                            "androidkey", staticSettings.getAndroidKey(),};
+                                    connect.setRequest(request_read);
+                                    //  connect.work();
+                                    connect.toWork();
+                                    //     Log.d(staticSettings.getLogTag(), "flag=4" + "|" + "md5clip=" + toMd5(clipRead()) + "|" + "clipread=" + clipRead());
                             /*
 
                         /* connect.getStateRequest() param result
@@ -153,36 +168,41 @@ public class ServiceInterCloud extends Service {
                             0 error connect
                             1 successfully
                          */
-                                while (connect.getStateRequest() == 2) {
-                                }
-                                data_from_server = null;
-                                data_from_server = connect.getResponse(); // string from server
-                                // тут решаем пришли другие данные или теже, чтобы не писать лишний раз в буфер обмена
-                                data_from_server_md5 = toMd5(data_from_server);
-                                data_clipboard_md5 = toMd5(data_clipboard_now);
-                                data_clipboard_first_start_md5 = toMd5(data_clipboard_first_start); // после рестарта сервиса сравниваем то что сейчас в бефере с тем что пришло и решаем показывать ли уведомление
-                                // Log.d(TAG, "STATE=" + Boolean.toString(data_from_server_md5.equals(data_clipboard_first_start_md5)));
-                                // Log.d(TAG, "md5=" + data_from_server_md5 + "|" + data_clipboard_first_start_md5);
+                                    while (connect.getStateRequest() == 2) {
+                                    }
+                                    data_from_server = null;
+                                    data_from_server = connect.getResponse(); // string from server
+                                    // тут решаем пришли другие данные или теже, чтобы не писать лишний раз в буфер обмена
+                                    data_from_server_md5 = toMd5(data_from_server);
+                                    data_clipboard_md5 = toMd5(data_clipboard_now);
+                                    data_clipboard_first_start_md5 = toMd5(data_clipboard_first_start); // после рестарта сервиса сравниваем то что сейчас в бефере с тем что пришло и решаем показывать ли уведомление
+                                    // Log.d(TAG, "STATE=" + Boolean.toString(data_from_server_md5.equals(data_clipboard_first_start_md5)));
+                                    // Log.d(TAG, "md5=" + data_from_server_md5 + "|" + data_clipboard_first_start_md5);
 
-                                if (!data_from_server_md5.equals(data_clipboard_md5) & !data_from_server_md5.equals(data_clipboard_first_start_md5) & !data_from_server_md5.equals(toMd5(clipRead())) & !data_from_server.equals("")) {
-                                    data_clipboard_ondevice = data_from_server;
-                                    if (data_from_server.equals("errrd")) {
-                                        Log.d(staticSettings.getLogTag(), "error read from server=" + data_from_server);
-                                    } else if (data_from_server.equals("==")) {
-                                        Log.d(staticSettings.getLogTag(), "md5 sum is equal, there is nothing to writing");
-                                    } else {
-                                        trigger_send_receive_notification = 1;
-                                        clipWrite(data_from_server);
-                                        Log.d(staticSettings.getLogTag(), "switch=" + sPref.getBoolean(APP_PREFERENCES_SWITCH_NOTIFICATION, true));
-                                        if (sPref.getBoolean(APP_PREFERENCES_SWITCH_NOTIFICATION, true)) {
-                                            basedNotification(data_from_server);
-                                            Log.d(staticSettings.getLogTag(), "NOTIFICATION=" + data_from_server);
-                                            //    Log.d(staticSettings.getLogTag(), "notification=" + sPref.getBoolean(APP_PREFERENCES_SWITCH_NOTIFICATION, true));
+                                    if (!data_from_server_md5.equals(data_clipboard_md5) & !data_from_server_md5.equals(data_clipboard_first_start_md5) & !data_from_server_md5.equals(toMd5(clipRead())) & !data_from_server.equals("")) {
+                                        data_clipboard_ondevice = data_from_server;
+                                        if (data_from_server.equals("errrd")) {
+                                            Log.d(staticSettings.getLogTag(), "error read from server=" + data_from_server);
+                                        } else if (data_from_server.equals("==")) {
+                                            Log.d(staticSettings.getLogTag(), "md5 sum is equal, there is nothing to writing");
+                                        } else {
+                                            trigger_send_receive_notification = 1;
+                                            clipWrite(data_from_server);
+                                            Log.d(staticSettings.getLogTag(), "switch=" + sPref.getBoolean(APP_PREFERENCES_SWITCH_NOTIFICATION, true));
+                                            if (sPref.getBoolean(APP_PREFERENCES_SWITCH_NOTIFICATION, true)) {
+                                                basedNotification(data_from_server);
+                                                Log.d(staticSettings.getLogTag(), "NOTIFICATION=" + data_from_server);
+                                                //    Log.d(staticSettings.getLogTag(), "notification=" + sPref.getBoolean(APP_PREFERENCES_SWITCH_NOTIFICATION, true));
+                                            }
                                         }
                                     }
-                                }
-                                // Log.d(staticSettings.getLogTag(), "Response from server=" + data_from_server);
+                                    // Log.d(staticSettings.getLogTag(), "Response from server=" + data_from_server);
 // end send body -----------------------------------------------------------
+                                }
+
+                                else if (!sPref.getBoolean(APP_PREFERENCES_SWITCH_FIREBASE, true)) {
+                                    Log.d(staticSettings.getLogTag(), "Soft sync");
+                                }
                             }
                         }
                         else {
@@ -190,16 +210,65 @@ public class ServiceInterCloud extends Service {
                             Log.d(staticSettings.getLogTag(), "Screen Off, no sync");
                         }
                     } catch (Exception e) {
-                     //   Log.d(staticSettings.getLogTag(), "error_connection_service=" + e);
+                        //   Log.d(staticSettings.getLogTag(), "error_connection_service=" + e);
                     }
                 }
             }
         });
         SharedPreferences sPref = getSharedPreferences("TAG", MODE_PRIVATE);
-        // chech witch enable synch before start sync
+        // check witch enable synch before start sync
         if (count_thread == 1 & sPref.getBoolean(APP_PREFERENCES_SWITCH_SYNC, true))  thread_cloud.start();
-        return super.onStartCommand(intent, flags, startId);
     }
+
+
+
+    public void softSynch(){
+        Thread thread_soft_sync = new Thread(new Runnable() {
+            public void run() {
+                //   ConnectLogic connect = new ConnectLogic(); // For server connect and send data
+                ConnectLogic connect = new ConnectLogic();
+                while (state_thread) {
+                    SharedPreferences sPref = getSharedPreferences("TAG", MODE_PRIVATE);
+                }
+                try {
+                    Log.d(staticSettings.getLogTag(), "softSync");
+                    TimeUnit.SECONDS.sleep(staticSettings.getTimePerUpdateData());
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        SharedPreferences sPref = getSharedPreferences("TAG", MODE_PRIVATE);
+        // check witch enable synch before start sync
+        if (count_thread == 1 & sPref.getBoolean(APP_PREFERENCES_SWITCH_FIREBASE, true))  thread_soft_sync.start();
+    }
+    /**
+     * Этот метод будем дергать из главного потока сервиса
+     * Предназначен для получения данных по сигналу от Firebase receiver. если есть сигнал от Firebase то забираем новые данные с сервера
+     */
+    public void startSyncFromFirebase(){
+        Thread waitFromFirebase = new Thread(new Runnable() {
+            public void run() {
+                ConnectLogic connectFromFirebase = new ConnectLogic();
+                connectFromFirebase.setScriptName("cloudapi.php");
+                String[] request_read = {
+                        "flag", "4",
+                        "cookie", user_key_fromdevice,
+                        "md5data", toMd5(clipRead()),
+                        "androidkey", staticSettings.getAndroidKey(),};
+                connectFromFirebase.setRequest(request_read);
+                //  connect.work();
+                connectFromFirebase.toWork();
+                while (connectFromFirebase.getStateRequest() == 2) {/* wait responce from server*/}
+                data_from_server = connectFromFirebase.getResponse(); // string from server
+                clipWrite(data_from_server);
+                basedNotification(data_from_server);
+            }
+        });
+        if (true)waitFromFirebase.start(); // check switch update from firebase and start thread or not start thread
+    }
+
+
 
     public IBinder onBind(Intent arg0) {
         return null;
@@ -369,30 +438,6 @@ public class ServiceInterCloud extends Service {
         noti.flags |= Notification.FLAG_ONLY_ALERT_ONCE;
         mNotificationManager.notify(0, noti);
     }
-    public void noto2() // paste in activity
-    {
-        Notification.Builder notif;
-        NotificationManager nm;
-        notif = new Notification.Builder(getApplicationContext());
-        notif.setSmallIcon(R.drawable.ic_notification);
-        notif.setContentTitle("");
-        Uri path = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        notif.setSound(path);
-        nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
-        Intent yesReceive = new Intent();
-        yesReceive.setAction(StaticSettings.YES_ACTION);
-        PendingIntent pendingIntentYes = PendingIntent.getBroadcast(this, 12345, yesReceive, PendingIntent.FLAG_UPDATE_CURRENT);
-        notif.addAction(R.drawable.ic_notification, "Yes", pendingIntentYes);
-
-
-        Intent yesReceive2 = new Intent();
-        yesReceive2.setAction(StaticSettings.STOP_ACTION);
-        PendingIntent pendingIntentYes2 = PendingIntent.getBroadcast(this, 12345, yesReceive2, PendingIntent.FLAG_UPDATE_CURRENT);
-        notif.addAction(R.drawable.ic_notification, "No", pendingIntentYes2);
-        nm.notify(10, notif.getNotification());
-    }
-
 
     private Notification setBigTextStyleNotification() {
         Bitmap remote_picture = null;

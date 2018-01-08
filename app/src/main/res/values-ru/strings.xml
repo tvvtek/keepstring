@@ -60,6 +60,8 @@
     <string name="switch_auto_start">Включить автозапуск</string>
     <string name="switch_sleep_sync">Синхронизация в спящем режиме</string>
     <string name="switch_dialog_before_sync">Отображать диалог перед синхронизацией</string>
+    <string name="switch_firebase">Легкая / Принудительная</string>
+
 
     <!-- Toast -->
     <string name="error_input_pin_get">Пин код должен быть от 6 до 10 символов.</string>

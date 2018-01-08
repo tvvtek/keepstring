@@ -36,6 +36,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tvvtek.connectpackage.ConnectLogic_old;
+import com.tvvtek.firebase.MyFirebaseInstanceIDService;
 import com.tvvtek.helpers.HelperFragmentHistoryDBWorked;
 import com.tvvtek.keepstring.MainActivity;
 import com.tvvtek.keepstring.R;
@@ -56,6 +57,8 @@ public class FragmentEnter extends Fragment {
     public final String APP_PREFERENCES_SWITCH_NOTIFICATION = "switch_notification";
     public final String APP_PREFERENCES_SWITCH_AUTOSTART = "switch_auto_start";
     public final String APP_PREFERENCES_SWITCH_SLEEP_SYNC = "switch_sleep_sync";
+    public final String APP_PREFERENCES_SWITCH_FIREBASE = "switch_firebase";
+    public final String APP_PREFERENCES_TOKEN_FIREBASE = "firebase_token";
     public static final String BROADCAST_ACTION = "action_session_closed";
     private BroadcastReceiver broadcastReceiver;
 
@@ -64,7 +67,7 @@ public class FragmentEnter extends Fragment {
     EditText enterLogin, enterPass;
     TextView enter_help_text, info_login, info_clipboardnow, clipboardnow, register_text, forgotpass;
     Button btnEnter, btnExit, btnRe_read, btnCleanHistory;
-    Switch switchAutoUpdate, switchNotification, switchAutoStart, switchSleepSync, switchDialogBeforeSync;
+    Switch switchAutoUpdate, switchNotification, switchAutoStart, switchSleepSync, switch_firebase, switchDialogBeforeSync;
     Handler handler_enter, handler_auto_reread_clip;
     StaticSettings staticSettings;
     private volatile String result = "";
@@ -226,6 +229,15 @@ public class FragmentEnter extends Fragment {
                 Thread thread_enter = new Thread(new Runnable() {
 
                     public void run() {
+                        /**
+                         * Make firebase obj and make unique token and
+                         */
+                        MyFirebaseInstanceIDService getToken = new MyFirebaseInstanceIDService();
+                        getToken.onTokenRefresh();
+                        String token = getToken.getNewToken();
+                        /**
+                         * Start enter logic
+                         */
                         Message message = handler_enter.obtainMessage();
                         Bundle bundle = new Bundle();
                         ConnectLogic_old connect = new ConnectLogic_old(); // For server connect and send data
@@ -277,7 +289,7 @@ public class FragmentEnter extends Fragment {
         return myView;
     }
     private View createViewAuthOk(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
-        final View myViewAuthOk = inflater.inflate(R.layout.fragment_settings_auth, container, false);
+        final View myViewAuthOk = inflater.inflate(R.layout.fragment_work, container, false);
         btnExit = (Button)myViewAuthOk.findViewById(R.id.btnExit);
         btnRe_read = (Button)myViewAuthOk.findViewById(R.id.btnRe_readclipboard);
         btnCleanHistory = (Button)myViewAuthOk.findViewById(R.id.btnCleanDb);
@@ -289,6 +301,7 @@ public class FragmentEnter extends Fragment {
         switchNotification = (Switch)myViewAuthOk.findViewById(R.id.switchNotification);
         switchAutoStart = (Switch)myViewAuthOk.findViewById(R.id.switchAutoStart);
         switchSleepSync = (Switch)myViewAuthOk.findViewById(R.id.switchSleepModeSync);
+        switch_firebase = (Switch)myViewAuthOk.findViewById(R.id.switchFirebase);
     //    switchDialogBeforeSync = (Switch)myViewAuthOk.findViewById(R.id.switchDialogbeforeSync);
         Context context = getContext();
         // получаем данные для состояния переключателей
@@ -298,6 +311,7 @@ public class FragmentEnter extends Fragment {
         switchNotification.setChecked(sPref.getBoolean(APP_PREFERENCES_SWITCH_NOTIFICATION, true));
         switchAutoStart.setChecked(sPref.getBoolean(APP_PREFERENCES_SWITCH_AUTOSTART, true));
         switchSleepSync.setChecked(sPref.getBoolean(APP_PREFERENCES_SWITCH_SLEEP_SYNC,false));
+        switch_firebase.setChecked(sPref.getBoolean(APP_PREFERENCES_SWITCH_FIREBASE,true));
      /*   switchDialogBeforeSync.setChecked(sPref.getBoolean(APP_PREFERENCES_DIALOG_BEFORE_SYNC,
                 false)); */
 
@@ -385,6 +399,24 @@ public class FragmentEnter extends Fragment {
                 }
             }
         });
+        switch_firebase.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            // listener switch auto update clipboard
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                //     sPref = PreferenceManager.getDefaultSharedPreferences(getContext());
+                SharedPreferences.Editor editor = sPref.edit();
+                if (isChecked) {
+                    editor.putBoolean(APP_PREFERENCES_SWITCH_FIREBASE, true);
+                    editor.apply();
+                    // Make PendingIntent for Task1
+                } else {
+                    editor.putBoolean(APP_PREFERENCES_SWITCH_FIREBASE, false);
+                    editor.apply();
+                }
+            }
+        });
+
+
         switchNotification.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             // listener switch auto update clipboard
             @Override

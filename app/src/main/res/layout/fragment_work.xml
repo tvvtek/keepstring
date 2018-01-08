@@ -116,6 +116,19 @@
             android:layout_gravity="center_horizontal"
             android:showText="true"
             android:theme="@style/Theme.AppCompat" />
+        <Switch
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:text="@string/switch_firebase"
+            android:id="@+id/switchFirebase"
+            android:scrollbarSize="30dp"
+            android:paddingTop="20dp"
+            android:paddingRight="20dp"
+            android:paddingLeft="20dp"
+            android:checked="false"
+            android:layout_gravity="center_horizontal"
+            android:showText="true"
+            android:theme="@style/Theme.AppCompat" />
       <!-- <Switch
             android:layout_width="350dp"
             android:layout_height="wrap_content"

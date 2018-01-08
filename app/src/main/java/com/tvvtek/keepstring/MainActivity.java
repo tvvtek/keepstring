@@ -56,12 +56,6 @@ public class MainActivity extends AppCompatActivity
             overridePendingTransition(R.anim.slide_transform,R.anim.alpha);
         }
         setContentView(R.layout.activity_main);
-
-        /**
-         * Make firebase obj and make unique token and
-         */
-        MyFirebaseInstanceIDService getToken = new MyFirebaseInstanceIDService();
-        getToken.onTokenRefresh();
     //    setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
